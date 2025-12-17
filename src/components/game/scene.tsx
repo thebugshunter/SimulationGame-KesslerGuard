@@ -206,9 +206,10 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             }
 
             void main() {
-                float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), p );
+                vec3 viewDirection = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
+                float intensity = pow(c - dot(vNormal, viewDirection), p);
                 float noise = 1.0 + snoise(vNormal * 4.0 + time * 0.5) * 0.1;
-                gl_FragColor = vec4( glowColor * noise, 1.0 ) * intensity;
+                gl_FragColor = vec4(glowColor * noise, 1.0) * intensity;
             }
         `,
         side: THREE.BackSide,
@@ -222,7 +223,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
     // Earth
     const earthGeometry = new THREE.SphereGeometry(30, 64, 64);
     const earthMaterial = new THREE.MeshStandardMaterial({
-        color: 0x4682B4, // A nice blue for the ocean
+        color: 0x4682B4,
         roughness: 0.8,
         metalness: 0.1,
     });
@@ -251,7 +252,8 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             uniform vec3 glowColor;
             varying vec3 vNormal;
             void main() {
-                float intensity = pow( c - dot( vNormal, vec3( 0.0, 0.0, 1.0 ) ), p );
+                vec3 viewDirection = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
+                float intensity = pow( c - dot( vNormal, viewDirection ), p );
                 gl_FragColor = vec4( glowColor, 1.0 ) * intensity;
             }
         `,
@@ -262,7 +264,6 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
     const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
     atmosphere.position.copy(earth.position);
     scene.add(atmosphere);
-
 
     // Moon
     const moonOrbit = new THREE.Group();
@@ -289,6 +290,31 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
     mars.position.set(400, 0, 0);
     marsOrbit.add(mars);
     marsOrbit.position.copy(earth.position);
+    
+    // Jupiter
+    const jupiterOrbit = new THREE.Group();
+    scene.add(jupiterOrbit);
+    const jupiterGeometry = new THREE.SphereGeometry(50, 64, 64);
+    const jupiterMaterial = new THREE.MeshStandardMaterial({
+      color: 0xD2B48C,
+      roughness: 0.7,
+    });
+    const jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
+    jupiter.position.set(800, 0, 0);
+    jupiterOrbit.add(jupiter);
+    
+    // Jupiter's Rings
+    const ringGeometry = new THREE.RingGeometry(60, 80, 64);
+    const ringMaterial = new THREE.MeshBasicMaterial({
+      color: 0x9A7B4F,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.5,
+    });
+    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.rotation.x = Math.PI * 0.4;
+    jupiter.add(ring);
+
 
     // Starfield
     const starVertices = [];
@@ -546,6 +572,8 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       moon.rotation.y += delta * 0.05;
       marsOrbit.rotation.y += delta * 0.005;
       mars.rotation.y += delta * 0.04;
+      jupiterOrbit.rotation.y += delta * 0.002;
+      jupiter.rotation.y += delta * 0.03;
       
       stars.rotation.y += delta * 0.002;
 
