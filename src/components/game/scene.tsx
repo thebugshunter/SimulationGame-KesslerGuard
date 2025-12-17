@@ -7,6 +7,7 @@ import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflar
 import { type SpaceObject, spaceObjects, type SpaceObjectType } from '@/lib/space-objects';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { useGameControls } from '@/hooks/use-game-controls';
+import type { CollisionWarning } from '@/components/ui/collision-avoidance-system';
 
 interface SceneProps {
   setSelectedObject: (object: SpaceObject | null) => void;
@@ -15,6 +16,8 @@ interface SceneProps {
   updateProximityVolume: (distance: number | null) => void;
   selectedObjectId: string | null;
   filters: Record<SpaceObjectType, boolean>;
+  isAutoAvoidanceOn: boolean;
+  setCollisionWarning: (warning: CollisionWarning | null) => void;
 }
 
 function createSatellite(): THREE.Group {
@@ -82,7 +85,7 @@ function createAsteroid(): THREE.Mesh {
     return asteroid;
 }
 
-export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters }: SceneProps) {
+export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, isAutoAvoidanceOn, setCollisionWarning }: SceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const linearVelocity = useRef(new THREE.Vector3());
   const selectionIndicatorRef = useRef<THREE.Group | null>(null);
@@ -391,7 +394,10 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       orbit.userData.rotationSpeed = (Math.random() - 0.5) * 0.1;
       
       scene.add(orbit);
-      object3d.userData = obj;
+      object3d.userData = {
+        ...obj,
+        lastPosition: object3d.position.clone(),
+      };
       objectMeshesRef.current.push(object3d);
     });
 
@@ -565,6 +571,58 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
         }
       }
 
+       // --- Collision Avoidance ---
+      let currentCollisionWarning: CollisionWarning | null = null;
+      if (isAutoAvoidanceOn) {
+        let closestThreat: { distance: number; object: THREE.Object3D } | null = null;
+        
+        for (const mesh of objectMeshesRef.current) {
+          if (!mesh.visible || (mesh.userData as SpaceObject).type === 'Debris') continue;
+
+          const worldPosition = new THREE.Vector3();
+          mesh.getWorldPosition(worldPosition);
+          const distance = camera.position.distanceTo(worldPosition);
+
+          if (distance < 30) { // Collision check radius
+            const relativeVelocity = new THREE.Vector3().copy(linearVelocity.current);
+            const objectVelocity = new THREE.Vector3().copy(worldPosition).sub(mesh.userData.lastPosition).divideScalar(delta);
+            relativeVelocity.sub(objectVelocity);
+
+            const relativePosition = new THREE.Vector3().copy(worldPosition).sub(camera.position);
+            const timeToCollision = -relativePosition.dot(relativeVelocity) / relativeVelocity.lengthSq();
+
+            if (timeToCollision > 0 && timeToCollision < 2) { // 2 seconds to impact
+              if (!closestThreat || distance < closestThreat.distance) {
+                closestThreat = { distance, object: mesh };
+              }
+            }
+          }
+          mesh.userData.lastPosition.copy(worldPosition);
+        }
+
+        if (closestThreat) {
+          const threatPosition = new THREE.Vector3();
+          closestThreat.object.getWorldPosition(threatPosition);
+          
+          const threatVector = new THREE.Vector3().subVectors(threatPosition, camera.position);
+          const threatDirection = threatVector.clone().projectOnPlane(camera.getWorldDirection(new THREE.Vector3())).normalize();
+          
+          // Project threat onto camera's local XY plane to get screen position
+          const localThreat = camera.worldToLocal(threatPosition.clone()).normalize();
+
+          // A simple escape vector: perpendicular to the threat direction
+          const escapeVector = new THREE.Vector3(-threatDirection.z, 0, threatDirection.x);
+
+          currentCollisionWarning = {
+            threatScreenX: localThreat.x,
+            threatScreenY: localThreat.y,
+            escapeScreenX: escapeVector.x,
+            escapeScreenY: escapeVector.y,
+            urgency: Math.max(0.2, 1 - (closestThreat.distance / 30))
+          };
+        }
+      }
+      setCollisionWarning(currentCollisionWarning);
 
       // Proximity check for sounds
       let closestDistance = null;
@@ -626,7 +684,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       scene.clear();
       objectMeshesRef.current = [];
     };
-  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters]);
+  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, isAutoAvoidanceOn, setCollisionWarning]);
 
   return <div ref={mountRef} className="h-full w-full" />;
 }

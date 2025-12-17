@@ -1,3 +1,4 @@
+
 export type SpaceObjectType = 'Debris' | 'Satellite' | 'Asteroid' | 'Comet';
 
 export interface SpaceObject {
@@ -9,6 +10,8 @@ export interface SpaceObject {
   velocity: [number, number, number];
   status: 'Working' | 'Defunct' | 'Natural';
   mass: number;
+  // This is a client-side addition for tracking velocity
+  lastPosition?: THREE.Vector3;
 }
 
 const objectTypes: SpaceObjectType[] = ['Debris', 'Satellite', 'Asteroid', 'Comet'];

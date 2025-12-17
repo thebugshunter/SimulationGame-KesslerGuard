@@ -18,14 +18,14 @@ export default function Home() {
   }, []);
 
   const handleStartMission = useCallback(() => {
-    if (!isSoundMuted) {
-        Object.values(audioRefs.current).forEach(audio => {
-            if (audio && audio.loop && audio.paused) {
-                audio.play().catch(e => {}); // Attempt to play, will obey mute state
-            }
-        });
-    }
     setIsLearningModalOpen(false);
+    if (!isSoundMuted) {
+      Object.values(audioRefs.current).forEach(audio => {
+          if (audio && audio.loop && audio.paused) {
+              audio.play().catch(e => {});
+          }
+      });
+    }
   }, [isSoundMuted]);
 
   // Effect to handle audio playback when isSoundMuted changes
@@ -136,6 +136,13 @@ export default function Home() {
             loop 
             preload="auto"
             onLoadedData={(e) => { if(e.currentTarget) e.currentTarget.volume = 0; }}
+          />
+           <audio
+            id="audio-collision-alarm"
+            ref={(el) => (audioRefs.current.collisionAlarm = el)}
+            src="/audio/collision-alarm.mp3"
+            loop
+            preload="auto"
           />
         </>
       )}

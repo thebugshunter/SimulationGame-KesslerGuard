@@ -1,13 +1,14 @@
 
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Scene } from './scene';
 import { PodDashboard } from '@/components/ui/pod-dashboard';
 import { Terminal } from '@/components/ui/terminal';
 import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
 import { useGameControls } from '@/hooks/use-game-controls';
 import { JoystickControls } from '@/components/ui/joystick-controls';
+import { CollisionAvoidanceSystem, type CollisionWarning } from '@/components/ui/collision-avoidance-system';
 
 export type ActiveTool = 'Scan' | 'Magnet' | 'Burner' | null;
 export type JoystickMode = 'move' | 'look' | null;
@@ -33,6 +34,8 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);
   const [activeTool, setActiveTool] = useState<ActiveTool>(null);
+  const [isAutoAvoidanceOn, setIsAutoAvoidanceOn] = useState(true);
+  const [collisionWarning, setCollisionWarning] = useState<CollisionWarning | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   
   const controls = useGameControls({
@@ -47,6 +50,20 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
         }
     }
   });
+
+  useEffect(() => {
+    const alarm = audioRefs.current.collisionAlarm;
+    if (!alarm) return;
+  
+    if (collisionWarning && !isSoundMuted) {
+      alarm.volume = collisionWarning.urgency;
+      if (alarm.paused) {
+        alarm.play().catch(e => {});
+      }
+    } else {
+      alarm.pause();
+    }
+  }, [collisionWarning, isSoundMuted, audioRefs]);
 
   const handleToolToggle = (tool: ActiveTool) => {
     const newTool = activeTool === tool ? null : tool;
@@ -88,8 +105,12 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
           updateProximityVolume={updateProximityVolume}
           selectedObjectId={selectedObject?.id ?? null}
           filters={filters}
+          isAutoAvoidanceOn={isAutoAvoidanceOn}
+          setCollisionWarning={setCollisionWarning}
         />
       </div>
+
+      <CollisionAvoidanceSystem warning={collisionWarning} />
       
       {/* Unified Bottom Bar */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-1 p-1 md:gap-4 md:p-4">
@@ -127,6 +148,8 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
           playClickSound={playClickSound}
           filters={filters}
           onFilterChange={handleFilterChange}
+          isAutoAvoidanceOn={isAutoAvoidanceOn}
+          onAutoAvoidanceChange={setIsAutoAvoidanceOn}
         />
       </div>
     </>
