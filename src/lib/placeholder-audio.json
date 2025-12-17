@@ -4,17 +4,17 @@
     {
       "id": "space-ambient",
       "description": "A low, deep, and continuous ambient hum of deep space.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2022/02/07/audio_8210332305.mp3"
+      "audioUrl": "https://cdn.pixabay.com/audio/2022/11/11/audio_a2f26c957e.mp3"
     },
     {
       "id": "scan-effect",
       "description": "A short, futuristic scanning sound effect.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2022/03/10/audio_a5a67c5270.mp3"
+      "audioUrl": "https://cdn.pixabay.com/audio/2022/03/10/audio_c3b092e347.mp3"
     },
     {
       "id": "proximity-hum",
       "description": "A low-frequency hum that can be used to indicate proximity to a large object.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2023/09/23/audio_7acb44a478.mp3"
+      "audioUrl": "https://cdn.pixabay.com/audio/2024/02/08/audio_6519179d39.mp3"
     },
     {
       "id": "ui-click",
@@ -24,7 +24,7 @@
     {
       "id": "ship-throttle",
       "description": "The continuous hum of a spaceship's engine throttling up or down.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2023/04/24/audio_388b6a319f.mp3"
+      "audioUrl": "https://cdn.pixabay.com/audio/2022/02/16/audio_19f39ae76c.mp3"
     }
   ]
 }
