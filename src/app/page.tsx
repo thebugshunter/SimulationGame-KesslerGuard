@@ -25,63 +25,43 @@ export default function Home() {
   }, []);
 
 
-  useEffect(() => {
-    const handleFirstPlay = () => {
-      if (!isSoundMuted) {
-        const ambient = audioRefs.current.ambient;
-        const proximity = audioRefs.current.proximity;
-        const throttle = audioRefs.current.throttle;
-        
-        ambient?.play().catch(e => console.error("Ambient play failed:", e));
-        proximity?.play().catch(e => console.error("Proximity play failed:", e));
-        throttle?.play().catch(e => console.error("Throttle play failed:", e));
-      }
-      window.removeEventListener('click', handleFirstPlay);
-      window.removeEventListener('keydown', handleFirstPlay);
-    };
-
-    window.addEventListener('click', handleFirstPlay);
-    window.addEventListener('keydown', handleFirstPlay);
-
-    return () => {
-      window.removeEventListener('click', handleFirstPlay);
-      window.removeEventListener('keydown', handleFirstPlay);
-       Object.values(audioRefs.current).forEach(audio => {
-        if (audio) {
-          audio.pause();
-        }
-      });
-    };
-  }, [isSoundMuted]);
-
-  useEffect(() => {
-    Object.values(audioRefs.current).forEach(audio => {
-      if (audio) {
-        audio.muted = isSoundMuted;
-      }
-    });
-  }, [isSoundMuted]);
+  const playAudio = (audio: HTMLAudioElement | null) => {
+    if (audio && !isSoundMuted) {
+      audio.play().catch(e => console.error(`Audio play failed for ${audio.id}:`, e));
+    }
+  }
 
   const onToggleSound = useCallback(() => {
     setIsSoundMuted(prevMuted => {
       const isNowMuted = !prevMuted;
-      const ambient = audioRefs.current.ambient;
-      if (ambient) {
-        if (isNowMuted) {
-          ambient.pause();
-        } else {
-          ambient.play().catch(e => {});
+      Object.values(audioRefs.current).forEach(audio => {
+        if (audio) {
+          audio.muted = isNowMuted;
         }
+      });
+
+      if (!isNowMuted) {
+        // If unmuting, try to play the looping sounds
+        playAudio(audioRefs.current.ambient);
+        playAudio(audioRefs.current.proximity);
+        playAudio(audioRefs.current.throttle);
+      } else {
+        // If muting, pause everything
+        Object.values(audioRefs.current).forEach(audio => {
+            audio?.pause();
+        });
       }
+
       return isNowMuted;
     });
   }, []);
+
 
   const playClickSound = useCallback(() => {
     const clickAudio = audioRefs.current.click;
     if (clickAudio && !isSoundMuted) {
       clickAudio.currentTime = 0;
-      clickAudio.play().catch(e => {});
+      playAudio(clickAudio);
     }
   }, [isSoundMuted]);
 
@@ -94,6 +74,7 @@ export default function Home() {
     } else {
       const volume = Math.max(0, 1 - (distance / 30));
       proximityAudio.volume = volume;
+      playAudio(proximityAudio); // Ensure it plays when in range
     }
   }, [isSoundMuted]);
 
@@ -101,12 +82,13 @@ export default function Home() {
     const throttleAudio = audioRefs.current.throttle;
     if (!throttleAudio) return;
 
-    if (isSoundMuted) {
+    if (isSoundMuted || thrust <= 0) {
         throttleAudio.volume = 0;
         return;
     }
     const volume = Math.max(0, Math.min(1, thrust)) * 0.7; // Max volume 70%
     throttleAudio.volume = volume;
+    playAudio(throttleAudio); // Ensure it plays when thrusting
   }, [isSoundMuted]);
 
   const handleAudioError = (e: React.SyntheticEvent<HTMLAudioElement, Event>) => {
@@ -124,6 +106,7 @@ export default function Home() {
             src={getAudioUrl('space-ambient')} 
             loop 
             preload="auto"
+            muted={isSoundMuted}
             onCanPlayThrough={() => { if(audioRefs.current.ambient) audioRefs.current.ambient.volume = 0.3; }}
             onError={handleAudioError}
           />
@@ -132,6 +115,7 @@ export default function Home() {
             ref={el => (audioRefs.current.scan = el)} 
             src={getAudioUrl('scan-effect')} 
             preload="auto"
+            muted={isSoundMuted}
             onCanPlayThrough={() => { if(audioRefs.current.scan) audioRefs.current.scan.volume = 0.8; }}
             onError={handleAudioError}
           />
@@ -141,6 +125,7 @@ export default function Home() {
             src={getAudioUrl('proximity-hum')} 
             loop 
             preload="auto"
+            muted={isSoundMuted}
             onCanPlayThrough={() => { if(audioRefs.current.proximity) audioRefs.current.proximity.volume = 0; }}
             onError={handleAudioError}
           />
@@ -149,6 +134,7 @@ export default function Home() {
             ref={el => (audioRefs.current.click = el)} 
             src={getAudioUrl('ui-click')} 
             preload="auto"
+            muted={isSoundMuted}
             onCanPlayThrough={() => { if(audioRefs.current.click) audioRefs.current.click.volume = 0.5; }}
             onError={handleAudioError}
           />
@@ -158,6 +144,7 @@ export default function Home() {
             src={getAudioUrl('ship-throttle')} 
             loop 
             preload="auto"
+            muted={isSoundMuted}
             onCanPlayThrough={() => { if(audioRefs.current.throttle) audioRefs.current.throttle.volume = 0; }}
             onError={handleAudioError}
           />
