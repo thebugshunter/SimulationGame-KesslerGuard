@@ -83,7 +83,7 @@ export function Joystick({ onMove, onToggle, isActive }: JoystickProps) {
     <div
       ref={baseRef}
       className={cn(
-        "relative h-32 w-32 rounded-full bg-black/20 backdrop-blur-sm touch-none transition-colors duration-200 flex items-center justify-center cursor-pointer",
+        "relative h-24 w-24 md:h-32 md:w-32 rounded-full bg-black/20 backdrop-blur-sm touch-none transition-colors duration-200 flex items-center justify-center cursor-pointer",
         isActive && "bg-accent/30"
       )}
       onPointerDown={handlePointerDown}
@@ -95,7 +95,7 @@ export function Joystick({ onMove, onToggle, isActive }: JoystickProps) {
       <div
         ref={stickRef}
         className={cn(
-            "absolute h-20 w-20 rounded-full bg-accent/50 transition-all duration-75 pointer-events-none",
+            "absolute h-16 w-16 md:h-20 md:w-20 rounded-full bg-accent/50 transition-all duration-75 pointer-events-none",
             isDragging && "scale-110 bg-accent/80",
             isActive && "bg-accent/80 ring-2 ring-accent"
         )}

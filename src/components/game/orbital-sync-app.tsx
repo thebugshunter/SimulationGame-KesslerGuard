@@ -113,8 +113,8 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
         />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
-        <div className="w-full max-w-7xl p-4 md:p-8 flex items-end justify-between gap-4">
-          <div className="pointer-events-auto">
+        <div className="w-full max-w-7xl p-2 md:p-4 flex items-end justify-between gap-2 md:gap-4">
+          <div className="pointer-events-auto md:w-auto">
               <JoystickControls 
                   onJoystickMove={setMoveJoystickState}
                   onToggle={() => {}} // No toggle needed for fixed roles
@@ -130,7 +130,7 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
                   playClickSound={playClickSound}
               />
           </div>
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto md:w-auto">
                <JoystickControls 
                   onJoystickMove={setLookJoystickState} 
                   onToggle={() => {}} // No toggle needed for fixed roles

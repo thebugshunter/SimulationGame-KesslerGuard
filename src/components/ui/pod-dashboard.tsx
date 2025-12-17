@@ -56,17 +56,17 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
     <div className="relative w-full">
         <CockpitFrame />
         <Reticle />
-        <div className="relative z-10 flex h-full items-end justify-between gap-2 px-2 py-2 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg">
+        <div className="relative z-10 flex h-full items-end justify-center md:justify-between flex-wrap-reverse md:flex-nowrap gap-2 px-1 py-2 md:px-2 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg">
             <div className="flex items-end gap-2">
                 <Button 
                     onClick={() => handleToolClick('Scan')}
                     variant={getToolVariant('Scan')}
                     size="lg" 
                     className={cn(
-                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-16 w-16 rounded-lg",
+                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-14 w-14 md:h-16 md:w-16 rounded-lg",
                         activeTool === 'Scan' && "bg-accent text-accent-foreground hover:bg-accent/90"
                     )}>
-                    <Scan className="h-8 w-8"/>
+                    <Scan className="h-6 w-6 md:h-8 md:w-8"/>
                     <span className="sr-only">Scan</span>
                 </Button>
                 <Button 
@@ -74,10 +74,10 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
                     variant={getToolVariant('Magnet')}
                     size="lg" 
                     className={cn(
-                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-16 w-16 rounded-lg",
+                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-14 w-14 md:h-16 md:w-16 rounded-lg",
                         activeTool === 'Magnet' && "bg-accent text-accent-foreground hover:bg-accent/90"
                     )}>
-                    <Magnet className="h-8 w-8"/>
+                    <Magnet className="h-6 w-6 md:h-8 md:w-8"/>
                     <span className="sr-only">Magnet</span>
                 </Button>
                 <Button 
@@ -85,10 +85,10 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
                     variant={getToolVariant('Burner')}
                     size="lg" 
                     className={cn(
-                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-16 w-16 rounded-lg",
+                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-14 w-14 md:h-16 md:w-16 rounded-lg",
                         activeTool === 'Burner' && "bg-accent text-accent-foreground hover:bg-accent/90"
                     )}>
-                    <Flame className="h-8 w-8"/>
+                    <Flame className="h-6 w-6 md:h-8 md:w-8"/>
                     <span className="sr-only">Plasma Burner</span>
                 </Button>
             </div>
@@ -99,16 +99,16 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
             </div>
 
             <div className="flex items-end gap-2">
-                <div className="flex h-16 items-center gap-4 rounded-lg border border-accent/50 bg-background/50 px-4 text-accent">
+                <div className="hidden md:flex h-16 items-center gap-4 rounded-lg border border-accent/50 bg-background/50 px-4 text-accent">
                     <Fuel className="h-8 w-8" />
                     <div className="text-right">
                         <div className="font-mono text-3xl font-bold">98%</div>
                         <div className="text-xs font-light uppercase tracking-widest opacity-70">Fuel</div>
                     </div>
                 </div>
-                <Button onClick={handleToggleTerminalClick} variant="outline" className="h-16 gap-2 rounded-lg border-accent/50 px-4 text-accent hover:bg-accent/10 hover:text-accent">
-                    <Menu className="h-8 w-8" />
-                    <span className="text-xl">DATA</span>
+                <Button onClick={handleToggleTerminalClick} variant="outline" className="h-14 md:h-16 gap-2 rounded-lg border-accent/50 px-3 md:px-4 text-accent hover:bg-accent/10 hover:text-accent">
+                    <Menu className="h-6 w-6 md:h-8 md:w-8" />
+                    <span className="text-lg md:text-xl">DATA</span>
                 </Button>
             </div>
         </div>
