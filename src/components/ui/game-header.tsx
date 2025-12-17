@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Rocket, Volume2, VolumeX, Fuel, Zap, Compass, AlertTriangle } from 'lucide-react';
+import { Rocket, Volume2, VolumeX, Fuel, Zap, Compass, AlertTriangle, Settings } from 'lucide-react';
 import { Button } from './button';
 
 interface StatusItemProps {
@@ -75,15 +75,25 @@ export function GameHeader({ isSoundMuted, onToggleSound }: GameHeaderProps) {
           />
       </div>
 
-      <Button 
-        onClick={onToggleSound} 
-        variant="ghost" 
-        size="icon" 
-        className="text-accent hover:bg-accent/10 hover:text-accent order-2 sm:order-3 self-center"
-      >
-        {isSoundMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
-        <span className="sr-only">Toggle Sound</span>
-      </Button>
+      <div className="flex items-center gap-2 order-2 sm:order-3 self-center">
+        <Button 
+          onClick={onToggleSound} 
+          variant="ghost" 
+          size="icon" 
+          className="text-accent hover:bg-accent/10 hover:text-accent"
+        >
+          {isSoundMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+          <span className="sr-only">Toggle Sound</span>
+        </Button>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-accent hover:bg-accent/10 hover:text-accent"
+        >
+          <Settings className="h-6 w-6" />
+          <span className="sr-only">Game Settings</span>
+        </Button>
+      </div>
     </header>
   );
 }
