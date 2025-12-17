@@ -28,8 +28,15 @@ export default function Home() {
   }, [isSoundMuted]);
 
   const handleStartMission = useCallback(() => {
-    setIsSoundMuted(false); // Unmute on start
-  }, []);
+    // Start ambient sound, but respect the muted state.
+    const ambientAudio = audioRefs.current.ambient;
+    if (ambientAudio) {
+      ambientAudio.muted = isSoundMuted;
+      if (!isSoundMuted) {
+          ambientAudio.play().catch(e => console.error('Ambient audio play failed:', e));
+      }
+    }
+  }, [isSoundMuted]);
 
   // Effect to handle audio playback when isSoundMuted changes
   useEffect(() => {
