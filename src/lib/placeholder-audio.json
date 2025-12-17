@@ -4,27 +4,27 @@
     {
       "id": "space-ambient",
       "description": "A low, deep, and continuous ambient hum of deep space.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2022/11/11/audio_a2f26c957e.mp3"
+      "audioUrl": "https://cdn.freesound.org/previews/533/533250_10993355-hq.mp3"
     },
     {
       "id": "scan-effect",
       "description": "A short, futuristic scanning sound effect.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2022/03/10/audio_c3b092e347.mp3"
+      "audioUrl": "https://cdn.freesound.org/previews/397/397253_4847399-hq.mp3"
     },
     {
       "id": "proximity-hum",
       "description": "A low-frequency hum that can be used to indicate proximity to a large object.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2024/02/08/audio_6519179d39.mp3"
+      "audioUrl": "https://cdn.freesound.org/previews/435/435649_6291929-hq.mp3"
     },
     {
       "id": "ui-click",
       "description": "A simple, clean click sound for UI interactions.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2022/03/15/audio_28292c31b3.mp3"
+      "audioUrl": "https://cdn.freesound.org/previews/483/483597_10793549-hq.mp3"
     },
     {
       "id": "ship-throttle",
       "description": "The continuous hum of a spaceship's engine throttling up or down.",
-      "audioUrl": "https://cdn.pixabay.com/audio/2022/02/16/audio_19f39ae76c.mp3"
+      "audioUrl": "https://cdn.freesound.org/previews/485/485503_6142131-hq.mp3"
     }
   ]
 }
