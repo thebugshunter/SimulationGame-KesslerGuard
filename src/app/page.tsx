@@ -32,7 +32,7 @@ export default function Home() {
         audio.muted = isSoundMuted;
         if (!isSoundMuted && audio.loop && audio.paused && !isLearningModalOpen) {
           audio.play().catch(e => {});
-        } else if (isSoundMuted && audio.loop && !audio.paused) {
+        } else if (isSoundMuted) { // Always pause if muted
           audio.pause();
         }
       }
@@ -97,14 +97,14 @@ export default function Home() {
             src="/audio/deep-space.mp3" 
             loop 
             preload="auto"
-            onLoadedData={() => { if(audioRefs.current.ambient) audioRefs.current.ambient.volume = 0.3; }}
+            onLoadedData={(e) => { if(e.currentTarget) e.currentTarget.volume = 0.3; }}
           />
           <audio 
             id="audio-scan"
             ref={el => (audioRefs.current.scan = el)} 
             src="/audio/scanner-beep.mp3"
             preload="auto"
-            onLoadedData={() => { if(audioRefs.current.scan) audioRefs.current.scan.volume = 0.8; }}
+            onLoadedData={(e) => { if(e.currentTarget) e.currentTarget.volume = 0.8; }}
           />
           <audio 
             id="audio-proximity"
@@ -112,14 +112,14 @@ export default function Home() {
             src="/audio/proximity-hum.mp3"
             loop 
             preload="auto"
-            onLoadedData={() => { if(audioRefs.current.proximity) audioRefs.current.proximity.volume = 0; }}
+            onLoadedData={(e) => { if(e.currentTarget) e.currentTarget.volume = 0; }}
           />
           <audio 
             id="audio-click"
             ref={el => (audioRefs.current.click = el)} 
             src="/audio/ui-click.mp3" 
             preload="auto"
-            onLoadedData={() => { if(audioRefs.current.click) audioRefs.current.click.volume = 0.5; }}
+            onLoadedData={(e) => { if(e.currentTarget) e.currentTarget.volume = 0.5; }}
           />
           <audio 
             id="audio-throttle"
@@ -127,7 +127,7 @@ export default function Home() {
             src="/audio/thruster-rumble.mp3"
             loop 
             preload="auto"
-            onLoadedData={() => { if(audioRefs.current.throttle) audioRefs.current.throttle.volume = 0; }}
+            onLoadedData={(e) => { if(e.currentTarget) e.currentTarget.volume = 0; }}
           />
         </>
       )}

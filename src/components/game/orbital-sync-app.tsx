@@ -4,7 +4,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { Scene } from './scene';
 import { PodDashboard } from '@/components/ui/pod-dashboard';
-import { SystemStatus } from '@/components/ui/system-status';
 import { Terminal } from '@/components/ui/terminal';
 import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
 import { useGameControls } from '@/hooks/use-game-controls';
@@ -96,8 +95,6 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           filters={filters}
         />
       </div>
-
-      <SystemStatus />
       
       {/* Unified Bottom Bar */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-1 p-1 md:gap-4 md:p-4">
