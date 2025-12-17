@@ -3,19 +3,19 @@
     {
       "id": "earth-day-texture",
       "description": "High resolution texture of planet Earth during the day",
-      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/8k/earth/earth_diffuse_8k.jpg",
+      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/earth/earth_diffuse_2k.jpg",
       "imageHint": "earth map"
     },
     {
       "id": "earth-night-texture",
       "description": "High resolution texture of planet Earth at night with city lights",
-      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/png/8k/earth_night/earth_night_8k.png",
+      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/earth_night/earth_night_2k.png",
       "imageHint": "earth night"
     },
     {
       "id": "earth-clouds-texture",
       "description": "High resolution texture of Earth's clouds",
-      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/png/4k/earth_clouds/earth_clouds_4k.png",
+      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/png/2k/earth_clouds/earth_clouds_2k.png",
       "imageHint": "earth clouds"
     },
     {
@@ -27,19 +27,19 @@
     {
       "id": "moon-texture",
       "description": "Texture of the Moon",
-      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/8k/moon_rock/moon_rock_diff_8k.jpg",
+      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/moon_rock/moon_rock_diff_2k.jpg",
       "imageHint": "moon planet"
     },
     {
       "id": "mars-texture",
       "description": "High resolution texture of Mars",
-      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/8k/rock_ground_10/rock_ground_10_diff_8k.jpg",
+      "imageUrl": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/rock_ground_10/rock_ground_10_diff_2k.jpg",
       "imageHint": "mars planet"
     },
     {
       "id": "jupiter-texture",
       "description": "High resolution texture of Jupiter",
-      "imageUrl": "https://svs.gsfc.nasa.gov/vis/a000000/a004400/a004443/jupiter_8k_C-2155x1024.png",
+      "imageUrl": "https://svs.gsfc.nasa.gov/vis/a000000/a004400/a004443/jupiter_2k_C-1077x512.png",
       "imageHint": "jupiter planet"
     }
   ]
