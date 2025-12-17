@@ -5,62 +5,49 @@ import { OrbitalSyncApp } from '@/components/game/orbital-sync-app';
 import { GameHeader } from '@/components/ui/game-header';
 import { PlaceHolderAudio } from '@/lib/placeholder-audio';
 import type { AudioPlaceholder } from '@/lib/placeholder-audio';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 
 // Helper to find audio URL by ID
 const getAudioUrl = (id: string) => PlaceHolderAudio.find(a => a.id === id)?.audioUrl;
 
 export default function Home() {
   const [isSoundMuted, setIsSoundMuted] = useState(true);
-  const [showStartScreen, setShowStartScreen] = useState(true);
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
-
   const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const playAudio = (audio: HTMLAudioElement | null) => {
-    if (audio && !isSoundMuted) {
-      audio.play().catch(e => console.error(`Audio play failed for ${audio.id}:`, e));
+  const playAudio = useCallback((audio: HTMLAudioElement | null) => {
+    if (audio) {
+      audio.muted = isSoundMuted;
+      if (!isSoundMuted) {
+        audio.play().catch(e => console.error(`Audio play failed for ${audio.id}:`, e));
+      }
     }
-  };
+  }, [isSoundMuted]);
 
-  const handleStartMission = () => {
-    setShowStartScreen(false);
+  const handleStartMission = useCallback(() => {
     setIsSoundMuted(false); // Unmute on start
-    
-    // This is the critical part: play looping audio after user interaction
+  }, []);
+
+  // Effect to handle audio playback when isSoundMuted changes
+  useEffect(() => {
     Object.values(audioRefs.current).forEach(audio => {
-        if(audio?.loop && !isSoundMuted) {
-            playAudio(audio);
+      if (audio) {
+        audio.muted = isSoundMuted;
+        if (!isSoundMuted && audio.loop) {
+          playAudio(audio);
+        } else if (isSoundMuted) {
+          audio.pause();
         }
+      }
     });
-  };
+  }, [isSoundMuted, playAudio]);
+
 
   const onToggleSound = useCallback(() => {
-    setIsSoundMuted(prevMuted => {
-      const isNowMuted = !prevMuted;
-      Object.values(audioRefs.current).forEach(audio => {
-        if (audio) {
-          audio.muted = isNowMuted;
-          if (isNowMuted) {
-            audio.pause();
-          } else if (audio.loop) {
-            playAudio(audio); // If unmuting, resume looping sounds
-          }
-        }
-      });
-      return isNowMuted;
-    });
+    setIsSoundMuted(prevMuted => !prevMuted);
   }, []);
 
   const playClickSound = useCallback(() => {
@@ -69,7 +56,7 @@ export default function Home() {
       clickAudio.currentTime = 0;
       playAudio(clickAudio);
     }
-  }, [isSoundMuted]);
+  }, [isSoundMuted, playAudio]);
 
   const updateProximityVolume = useCallback((distance: number | null) => {
     const proximityAudio = audioRefs.current.proximity;
@@ -156,21 +143,8 @@ export default function Home() {
         updateProximityVolume={updateProximityVolume}
         updateThrottleSound={updateThrottleSound}
         playClickSound={playClickSound}
+        onStartMission={handleStartMission}
       />
-
-      <Dialog open={showStartScreen} onOpenChange={() => {}}>
-        <DialogContent className="sm:max-w-md bg-background/80 backdrop-blur-md border-accent/50" hideCloseButton>
-            <DialogHeader>
-                <DialogTitle className="font-headline text-accent text-2xl">OrbitalSync Initiative</DialogTitle>
-                <DialogDescription>
-                    Your mission is critical. Pilot your cleanup pod, manage space debris, and prevent the Kessler Syndrome. The future of space exploration is in your hands.
-                </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-                <Button onClick={handleStartMission} className="w-full bg-accent text-background hover:bg-accent/90">Start Mission</Button>
-            </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </main>
   );
 }

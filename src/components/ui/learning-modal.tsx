@@ -11,13 +11,13 @@ import { Move, Mouse, Scan, Target } from 'lucide-react';
 
 interface LearningModalProps {
   isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
+  onClose: () => void;
 }
 
-export function LearningModal({ isOpen, onOpenChange }: LearningModalProps) {
+export function LearningModal({ isOpen, onClose }: LearningModalProps) {
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md bg-background/80 backdrop-blur-md border-accent/50">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-md bg-background/80 backdrop-blur-md border-accent/50" hideCloseButton>
         <DialogHeader>
           <DialogTitle className="font-headline text-accent text-2xl">Welcome to OrbitalSync</DialogTitle>
           <DialogDescription>
@@ -63,7 +63,7 @@ export function LearningModal({ isOpen, onOpenChange }: LearningModalProps) {
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={() => onOpenChange(false)} className="bg-accent text-background hover:bg-accent/90">Start Mission</Button>
+          <Button onClick={onClose} className="bg-accent text-background hover:bg-accent/90">Start Mission</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -19,6 +19,7 @@ interface OrbitalSyncAppProps {
   updateProximityVolume: (distance: number | null) => void;
   updateThrottleSound: (thrust: number) => void;
   playClickSound: () => void;
+  onStartMission: () => void;
 }
 
 const initialFilters = {
@@ -28,7 +29,7 @@ const initialFilters = {
   Comet: true,
 };
 
-export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound }: OrbitalSyncAppProps) {
+export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound, onStartMission }: OrbitalSyncAppProps) {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [selectedObject, setSelectedObject] = useState<SpaceObject | null>(null);
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
@@ -93,6 +94,11 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
     controls.setLookJoystickState(x, y);
   }, [controls]);
 
+  const handleCloseLearningModal = () => {
+    setIsLearningModalOpen(false);
+    onStartMission();
+  }
+
 
   return (
     <>
@@ -144,7 +150,7 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           onFilterChange={handleFilterChange}
         />
       </div>
-      <LearningModal isOpen={isLearningModalOpen} onOpenChange={setIsLearningModalOpen} />
+      <LearningModal isOpen={isLearningModalOpen} onClose={handleCloseLearningModal} />
     </>
   );
 }
