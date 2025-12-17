@@ -105,35 +105,40 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           filters={filters}
         />
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
-        <div className="pointer-events-auto w-full flex-1">
-            <PodDashboard 
-                onToggleTerminal={handleToggleTerminal} 
-                onToolToggle={handleToolToggle}
-                activeTool={activeTool}
-                playClickSound={playClickSound}
-            />
-        </div>
-        <div className="w-full max-w-7xl p-1 md:p-4 flex items-end justify-between gap-1 md:gap-4">
+      
+      {/* Unified Bottom Bar */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-1 p-1 md:gap-4 md:p-4">
+          {/* Left Joystick */}
           <div className="pointer-events-auto shrink-0">
               <JoystickControls 
                   onJoystickMove={setMoveJoystickState}
-                  onToggle={() => {}} // No toggle needed for fixed roles
-                  isActive={true} // Always "active"
+                  onToggle={() => {}} 
+                  isActive={true}
                   label="Move"
               />
           </div>
           
+          {/* Center Dashboard - takes up remaining space */}
+          <div className="pointer-events-auto flex-1 pb-1 md:pb-0">
+              <PodDashboard 
+                  onToggleTerminal={handleToggleTerminal} 
+                  onToolToggle={handleToolToggle}
+                  activeTool={activeTool}
+                  playClickSound={playClickSound}
+              />
+          </div>
+
+          {/* Right Joystick */}
           <div className="pointer-events-auto shrink-0">
                <JoystickControls 
                   onJoystickMove={setLookJoystickState} 
-                  onToggle={() => {}} // No toggle needed for fixed roles
-                  isActive={true} // Always "active"
+                  onToggle={() => {}}
+                  isActive={true}
                   label="Look"
               />
           </div>
-        </div>
       </div>
+
       <div className="pointer-events-auto">
         <Terminal 
           isOpen={isTerminalOpen} 

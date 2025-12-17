@@ -53,20 +53,21 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full h-full">
         <CockpitFrame />
         <Reticle />
-        <div className="relative z-10 flex h-full items-end justify-center md:justify-between flex-wrap-reverse md:flex-nowrap gap-1 px-1 pb-1 md:px-4 md:gap-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg">
+        <div className="relative z-10 flex h-full items-end justify-center flex-wrap-reverse gap-1 md:gap-2 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg">
+            {/* Tool Buttons */}
             <div className="flex items-end gap-1 md:gap-2">
                 <Button 
                     onClick={() => handleToolClick('Scan')}
                     variant={getToolVariant('Scan')}
                     size="lg" 
                     className={cn(
-                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-12 w-12 md:h-16 md:w-16 rounded-lg",
+                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-12 w-12 md:h-16 md:w-16 rounded-lg p-2",
                         activeTool === 'Scan' && "bg-accent text-accent-foreground hover:bg-accent/90"
                     )}>
-                    <Scan className="h-5 w-5 md:h-8 md:w-8"/>
+                    <Scan className="h-full w-full"/>
                     <span className="sr-only">Scan</span>
                 </Button>
                 <Button 
@@ -74,10 +75,10 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
                     variant={getToolVariant('Magnet')}
                     size="lg" 
                     className={cn(
-                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-12 w-12 md:h-16 md:w-16 rounded-lg",
+                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-12 w-12 md:h-16 md:w-16 rounded-lg p-2",
                         activeTool === 'Magnet' && "bg-accent text-accent-foreground hover:bg-accent/90"
                     )}>
-                    <Magnet className="h-5 w-5 md:h-8 md:w-8"/>
+                    <Magnet className="h-full w-full"/>
                     <span className="sr-only">Magnet</span>
                 </Button>
                 <Button 
@@ -85,30 +86,32 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
                     variant={getToolVariant('Burner')}
                     size="lg" 
                     className={cn(
-                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-12 w-12 md:h-16 md:w-16 rounded-lg",
+                        "border-accent/50 text-accent hover:bg-accent/10 hover:text-accent aspect-square h-12 w-12 md:h-16 md:w-16 rounded-lg p-2",
                         activeTool === 'Burner' && "bg-accent text-accent-foreground hover:bg-accent/90"
                     )}>
-                    <Flame className="h-5 w-5 md:h-8 md:w-8"/>
+                    <Flame className="h-full w-full"/>
                     <span className="sr-only">Plasma Burner</span>
                 </Button>
             </div>
 
-            <div className="hidden min-[480px]:flex flex-grow flex-col items-center text-accent mx-4 text-center">
-                <span className="text-sm font-light uppercase tracking-widest opacity-70">Kessler Likelihood</span>
-                <span className="font-mono text-4xl font-bold">{kesslerScore}%</span>
+            {/* Center Info - hidden on smallest screens */}
+            <div className="hidden min-[480px]:flex flex-col items-center text-accent mx-2 md:mx-4 text-center">
+                <span className="text-xs md:text-sm font-light uppercase tracking-widest opacity-70">Kessler Likelihood</span>
+                <span className="font-mono text-2xl md:text-4xl font-bold">{kesslerScore}%</span>
             </div>
 
+            {/* Right Side Buttons */}
             <div className="flex items-end gap-1 md:gap-2">
-                <div className="hidden min-[480px]:flex h-16 items-center gap-4 rounded-lg border border-accent/50 bg-background/50 px-4 text-accent">
-                    <Fuel className="h-8 w-8" />
+                <div className="hidden min-[600px]:flex h-16 items-center gap-2 md:gap-4 rounded-lg border border-accent/50 bg-background/50 px-2 md:px-4 text-accent">
+                    <Fuel className="h-6 w-6 md:h-8 md:w-8" />
                     <div className="text-right">
-                        <div className="font-mono text-3xl font-bold">98%</div>
+                        <div className="font-mono text-xl md:text-3xl font-bold">98%</div>
                         <div className="text-xs font-light uppercase tracking-widest opacity-70">Fuel</div>
                     </div>
                 </div>
                 <Button onClick={handleToggleTerminalClick} variant="outline" className="h-12 md:h-16 gap-1 md:gap-2 rounded-lg border-accent/50 px-2 md:px-4 text-accent hover:bg-accent/10 hover:text-accent">
                     <Menu className="h-5 w-5 md:h-8 md:w-8" />
-                    <span className="text-base md:text-xl">DATA</span>
+                    <span className="hidden sm:inline text-base md:text-xl">DATA</span>
                 </Button>
             </div>
         </div>
