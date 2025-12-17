@@ -106,6 +106,14 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
         />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
+        <div className="pointer-events-auto w-full flex-1">
+            <PodDashboard 
+                onToggleTerminal={handleToggleTerminal} 
+                onToolToggle={handleToolToggle}
+                activeTool={activeTool}
+                playClickSound={playClickSound}
+            />
+        </div>
         <div className="w-full max-w-7xl p-1 md:p-4 flex items-end justify-between gap-1 md:gap-4">
           <div className="pointer-events-auto shrink-0">
               <JoystickControls 
@@ -115,14 +123,7 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
                   label="Move"
               />
           </div>
-          <div className="pointer-events-auto w-full flex-1">
-              <PodDashboard 
-                  onToggleTerminal={handleToggleTerminal} 
-                  onToolToggle={handleToolToggle}
-                  activeTool={activeTool}
-                  playClickSound={playClickSound}
-              />
-          </div>
+          
           <div className="pointer-events-auto shrink-0">
                <JoystickControls 
                   onJoystickMove={setLookJoystickState} 

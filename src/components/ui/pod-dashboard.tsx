@@ -56,7 +56,7 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
     <div className="relative w-full">
         <CockpitFrame />
         <Reticle />
-        <div className="relative z-10 flex h-full items-end justify-center md:justify-between flex-wrap-reverse md:flex-nowrap gap-1 px-1 py-2 md:px-2 md:gap-2 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg">
+        <div className="relative z-10 flex h-full items-end justify-center md:justify-between flex-wrap-reverse md:flex-nowrap gap-1 px-1 pb-1 md:px-4 md:gap-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg">
             <div className="flex items-end gap-1 md:gap-2">
                 <Button 
                     onClick={() => handleToolClick('Scan')}
@@ -93,13 +93,13 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
                 </Button>
             </div>
 
-            <div className="hidden min-[800px]:flex flex-grow flex-col items-center text-accent mx-4 text-center">
+            <div className="hidden min-[480px]:flex flex-grow flex-col items-center text-accent mx-4 text-center">
                 <span className="text-sm font-light uppercase tracking-widest opacity-70">Kessler Likelihood</span>
                 <span className="font-mono text-4xl font-bold">{kesslerScore}%</span>
             </div>
 
             <div className="flex items-end gap-1 md:gap-2">
-                <div className="hidden min-[800px]:flex h-16 items-center gap-4 rounded-lg border border-accent/50 bg-background/50 px-4 text-accent">
+                <div className="hidden min-[480px]:flex h-16 items-center gap-4 rounded-lg border border-accent/50 bg-background/50 px-4 text-accent">
                     <Fuel className="h-8 w-8" />
                     <div className="text-right">
                         <div className="font-mono text-3xl font-bold">98%</div>
