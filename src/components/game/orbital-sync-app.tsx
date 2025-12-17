@@ -4,8 +4,8 @@
 import { useState, useRef, useCallback } from 'react';
 import { Scene } from './scene';
 import { PodDashboard } from '@/components/ui/pod-dashboard';
+import { SystemStatus } from '@/components/ui/system-status';
 import { Terminal } from '@/components/ui/terminal';
-import { LearningModal } from '@/components/ui/learning-modal';
 import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
 import { useGameControls } from '@/hooks/use-game-controls';
 import { JoystickControls } from '@/components/ui/joystick-controls';
@@ -34,14 +34,12 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);
   const [activeTool, setActiveTool] = useState<ActiveTool>(null);
-  const [joystickMode, setJoystickMode] = useState<JoystickMode>('move');
   const sceneRef = useRef<HTMLDivElement>(null);
   
   const controls = useGameControls({
     targetRef: sceneRef, 
     updateThrottleSound, 
     activeTool,
-    joystickMode,
     onScan: () => {
         const scanAudio = audioRefs.current.scan;
         if (scanAudio && !isSoundMuted) {
@@ -61,13 +59,6 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
     setActiveTool(newTool);
     playClickSound();
   };
-
-  const handleJoystickModeToggle = useCallback((mode: JoystickMode) => {
-    // This logic is now simplified as joysticks have dedicated roles.
-    // If you want to allow toggling which hand does what, this could be expanded.
-    playClickSound();
-  }, [playClickSound]);
-
 
   const handleSelectObject = (object: SpaceObject | null) => {
     setSelectedObject(object);
@@ -105,6 +96,8 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           filters={filters}
         />
       </div>
+
+      <SystemStatus />
       
       {/* Unified Bottom Bar */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-1 p-1 md:gap-4 md:p-4">
@@ -112,14 +105,12 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           <div className="pointer-events-auto shrink-0">
               <JoystickControls 
                   onJoystickMove={setMoveJoystickState}
-                  onToggle={() => {}} 
-                  isActive={true}
                   label="Move"
               />
           </div>
           
           {/* Center Dashboard - takes up remaining space */}
-          <div className="pointer-events-auto flex-1 pb-1 md:pb-0">
+          <div className="pointer-events-auto flex-1 pb-1 md:pb-0 min-w-0">
               <PodDashboard 
                   onToggleTerminal={handleToggleTerminal} 
                   onToolToggle={handleToolToggle}
@@ -132,8 +123,6 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           <div className="pointer-events-auto shrink-0">
                <JoystickControls 
                   onJoystickMove={setLookJoystickState} 
-                  onToggle={() => {}}
-                  isActive={true}
                   label="Look"
               />
           </div>

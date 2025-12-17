@@ -5,11 +5,9 @@ import { useRef, useState } from 'react';
 
 interface JoystickProps {
   onMove: (x: number, y: number) => void;
-  onToggle: () => void;
-  isActive: boolean;
 }
 
-export function Joystick({ onMove, onToggle, isActive }: JoystickProps) {
+export function Joystick({ onMove }: JoystickProps) {
   const baseRef = useRef<HTMLDivElement>(null);
   const stickRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -83,8 +81,7 @@ export function Joystick({ onMove, onToggle, isActive }: JoystickProps) {
     <div
       ref={baseRef}
       className={cn(
-        "relative h-20 w-20 md:h-32 md:w-32 rounded-full bg-black/20 backdrop-blur-sm touch-none transition-colors duration-200 flex items-center justify-center cursor-pointer",
-        isActive && "bg-accent/30"
+        "relative h-20 w-20 md:h-32 md:w-32 rounded-full bg-black/20 backdrop-blur-sm touch-none transition-colors duration-200 flex items-center justify-center cursor-pointer"
       )}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -96,8 +93,7 @@ export function Joystick({ onMove, onToggle, isActive }: JoystickProps) {
         ref={stickRef}
         className={cn(
             "absolute h-12 w-12 md:h-20 md:w-20 rounded-full bg-accent/50 transition-all duration-75 pointer-events-none",
-            isDragging && "scale-110 bg-accent/80",
-            isActive && "bg-accent/80 ring-2 ring-accent"
+            isDragging && "scale-110 bg-accent/80 ring-2 ring-accent"
         )}
         style={{ transform: 'translate(0px, 0px)' }}
       />

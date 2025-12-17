@@ -1,8 +1,7 @@
 
 'use client';
-import { Scan, Magnet, Menu, Flame, Fuel } from 'lucide-react';
+import { Scan, Magnet, Menu, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import type { ActiveTool } from '@/components/game/orbital-sync-app';
 
@@ -14,7 +13,7 @@ const CockpitFrame = () => (
 );
 
 const Reticle = () => (
-  <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+  <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
     <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M50 35 V 0 M50 65 V 100 M65 50 H 100 M35 50 H 0" stroke="hsl(var(--accent))" strokeOpacity="0.4" strokeWidth="1"/>
         <circle cx="50" cy="50" r="10" stroke="hsl(var(--accent))" strokeOpacity="0.7" strokeWidth="1"/>
@@ -30,15 +29,7 @@ interface PodDashboardProps {
 }
 
 
-export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playClickSound }: PodDashboardProps) {
-  const [kesslerScore, setKesslerScore] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-        setKesslerScore(Math.floor(Math.random() * 20) + 5);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool }: PodDashboardProps) {
 
   const handleToolClick = (tool: ActiveTool) => {
     onToolToggle(tool);
@@ -56,7 +47,7 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
     <div className="relative w-full h-full">
         <CockpitFrame />
         <Reticle />
-        <div className="relative z-10 flex h-full items-end justify-center flex-wrap-reverse gap-1 md:gap-2 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg">
+        <div className="relative z-10 flex h-full items-end justify-center gap-1 md:gap-2 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-1 md:p-0 rounded-lg">
             {/* Tool Buttons */}
             <div className="flex items-end gap-1 md:gap-2">
                 <Button 
@@ -94,21 +85,8 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool, playC
                 </Button>
             </div>
 
-            {/* Center Info - hidden on smallest screens */}
-            <div className="hidden min-[480px]:flex flex-col items-center text-accent mx-2 md:mx-4 text-center">
-                <span className="text-xs md:text-sm font-light uppercase tracking-widest opacity-70">Kessler Likelihood</span>
-                <span className="font-mono text-2xl md:text-4xl font-bold">{kesslerScore}%</span>
-            </div>
-
             {/* Right Side Buttons */}
             <div className="flex items-end gap-1 md:gap-2">
-                <div className="hidden min-[600px]:flex h-16 items-center gap-2 md:gap-4 rounded-lg border border-accent/50 bg-background/50 px-2 md:px-4 text-accent">
-                    <Fuel className="h-6 w-6 md:h-8 md:w-8" />
-                    <div className="text-right">
-                        <div className="font-mono text-xl md:text-3xl font-bold">98%</div>
-                        <div className="text-xs font-light uppercase tracking-widest opacity-70">Fuel</div>
-                    </div>
-                </div>
                 <Button onClick={handleToggleTerminalClick} variant="outline" className="h-12 md:h-16 gap-1 md:gap-2 rounded-lg border-accent/50 px-2 md:px-4 text-accent hover:bg-accent/10 hover:text-accent">
                     <Menu className="h-5 w-5 md:h-8 md:w-8" />
                     <span className="hidden sm:inline text-base md:text-xl">DATA</span>

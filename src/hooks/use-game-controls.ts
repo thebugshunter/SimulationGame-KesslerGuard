@@ -1,13 +1,12 @@
 
 'use client';
 import { useEffect, useRef, useCallback } from 'react';
-import type { ActiveTool, JoystickMode } from '@/components/game/orbital-sync-app';
+import type { ActiveTool } from '@/components/game/orbital-sync-app';
 
 interface GameControlsProps {
     targetRef: React.RefObject<HTMLElement>;
     updateThrottleSound?: (thrust: number) => void;
     activeTool: ActiveTool;
-    joystickMode: JoystickMode;
     onScan: () => void;
 }
 
@@ -15,7 +14,6 @@ export const useGameControls = ({
     targetRef,
     updateThrottleSound,
     activeTool,
-    joystickMode,
     onScan,
 }: GameControlsProps) => {
     const moveState = useRef({ 
@@ -145,7 +143,7 @@ export const useGameControls = ({
             case 'KeyQ': moveState.current.rollLeft = true; break;
             case 'KeyE': moveState.current.rollRight = true; break;
             case 'Space': if (!moveState.current.up) { moveState.current.up = true; isMovingNow = true; } break;
-            case 'ShiftLeft': case 'ControlLeft': if (!moveState.current.down) { moveState.current.down = true; isMovingNow = true; } break;
+            case 'ShiftLeft': case 'ControlLeft': if (!move.current.down) { moveState.current.down = true; isMovingNow = true; } break;
         }
         if (isMovingNow) {
           updateThrottleFromState();
