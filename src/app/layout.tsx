@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
-  title: 'OrbitalSync',
+  title: 'Kessler Guard',
   description: 'Clean up space debris in a high-fidelity 3D environment.',
 };
 

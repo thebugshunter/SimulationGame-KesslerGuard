@@ -53,7 +53,7 @@ export function GameHeader({ isSoundMuted, onToggleSound, onToggleTerminal }: Ga
       <div className="flex items-center gap-2 self-center">
         <Rocket className="h-6 w-6 text-accent" />
         <h1 className="font-headline text-2xl font-bold tracking-tighter text-white">
-          OrbitalSync
+          Kessler Guard
         </h1>
       </div>
 

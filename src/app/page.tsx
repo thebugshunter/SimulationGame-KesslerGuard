@@ -1,7 +1,7 @@
 
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { OrbitalSyncApp } from '@/components/game/orbital-sync-app';
+import { KesslerGuardApp } from '@/components/game/kessler-guard-app';
 import { GameHeader } from '@/components/ui/game-header';
 import { LearningModal } from '@/components/ui/learning-modal';
 
@@ -144,7 +144,7 @@ export default function Home() {
         onToggleSound={onToggleSound} 
         onToggleTerminal={handleToggleTerminal}
       />
-      <OrbitalSyncApp 
+      <KesslerGuardApp 
         audioRefs={audioRefs} 
         isSoundMuted={isSoundMuted}
         updateProximityVolume={updateProximityVolume}

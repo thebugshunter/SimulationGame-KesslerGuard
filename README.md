@@ -1,6 +1,6 @@
-# OrbitalSync: A Space Debris Cleanup Simulation
+# Kessler Guard: A Space Debris Cleanup Simulation
 
-Welcome to OrbitalSync, a high-fidelity simulation where you pilot a remote-controlled pod in low-earth orbit to help clean up space debris.
+Welcome to Kessler Guard, a high-fidelity simulation where you pilot a remote-controlled pod in low-earth orbit to help clean up space debris.
 
 ## The Mission
 

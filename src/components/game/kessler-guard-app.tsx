@@ -12,7 +12,7 @@ import { JoystickControls } from '@/components/ui/joystick-controls';
 export type ActiveTool = 'Scan' | 'Magnet' | 'Burner' | null;
 export type JoystickMode = 'move' | 'look' | null;
 
-interface OrbitalSyncAppProps {
+interface KesslerGuardAppProps {
   audioRefs: React.MutableRefObject<{ [key: string]: HTMLAudioElement | null }>;
   isSoundMuted: boolean;
   updateProximityVolume: (distance: number | null) => void;
@@ -28,7 +28,7 @@ const initialFilters = {
   Comet: true,
 };
 
-export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound, isTerminalOpen }: OrbitalSyncAppProps) {
+export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound, isTerminalOpen }: KesslerGuardAppProps) {
   const [selectedObject, setSelectedObject] = useState<SpaceObject | null>(null);
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);

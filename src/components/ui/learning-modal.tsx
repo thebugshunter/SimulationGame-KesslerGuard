@@ -19,7 +19,7 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md bg-background/80 backdrop-blur-md border-accent/50" hideCloseButton>
         <DialogHeader>
-          <DialogTitle className="font-headline text-accent text-2xl">Welcome to OrbitalSync</DialogTitle>
+          <DialogTitle className="font-headline text-accent text-2xl">Welcome to Kessler Guard</DialogTitle>
           <DialogDescription>
             Your mission is to help clean up low-earth orbit. The Kessler Syndrome is a real threat, and this simulation is a training ground for the science and engineering needed to solve it. You are pioneering the future of remote work, performing critical operations in space, all from Earth.
           </DialogDescription>
