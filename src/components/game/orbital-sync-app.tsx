@@ -19,7 +19,6 @@ interface OrbitalSyncAppProps {
   updateProximityVolume: (distance: number | null) => void;
   updateThrottleSound: (thrust: number) => void;
   playClickSound: () => void;
-  onStartMission: () => void;
 }
 
 const initialFilters = {
@@ -29,11 +28,10 @@ const initialFilters = {
   Comet: true,
 };
 
-export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound, onStartMission }: OrbitalSyncAppProps) {
+export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound }: OrbitalSyncAppProps) {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const [selectedObject, setSelectedObject] = useState<SpaceObject | null>(null);
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
-  const [isLearningModalOpen, setIsLearningModalOpen] = useState(true);
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);
   const [activeTool, setActiveTool] = useState<ActiveTool>(null);
   const [joystickMode, setJoystickMode] = useState<JoystickMode>('move');
@@ -94,11 +92,6 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
     controls.setLookJoystickState(x, y);
   }, [controls]);
 
-  const handleCloseLearningModal = () => {
-    setIsLearningModalOpen(false);
-    onStartMission();
-  }
-
 
   return (
     <>
@@ -113,8 +106,8 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
         />
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center">
-        <div className="w-full max-w-7xl p-2 md:p-4 flex items-end justify-between gap-2 md:gap-4">
-          <div className="pointer-events-auto md:w-auto">
+        <div className="w-full max-w-7xl p-1 md:p-4 flex items-end justify-between gap-1 md:gap-4">
+          <div className="pointer-events-auto shrink-0">
               <JoystickControls 
                   onJoystickMove={setMoveJoystickState}
                   onToggle={() => {}} // No toggle needed for fixed roles
@@ -130,7 +123,7 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
                   playClickSound={playClickSound}
               />
           </div>
-          <div className="pointer-events-auto md:w-auto">
+          <div className="pointer-events-auto shrink-0">
                <JoystickControls 
                   onJoystickMove={setLookJoystickState} 
                   onToggle={() => {}} // No toggle needed for fixed roles
@@ -150,7 +143,6 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           onFilterChange={handleFilterChange}
         />
       </div>
-      <LearningModal isOpen={isLearningModalOpen} onClose={handleCloseLearningModal} />
     </>
   );
 }
