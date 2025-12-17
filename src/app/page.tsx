@@ -3,16 +3,14 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { OrbitalSyncApp } from '@/components/game/orbital-sync-app';
 import { GameHeader } from '@/components/ui/game-header';
-import { PlaceHolderAudio } from '@/lib/placeholder-audio';
-import type { AudioPlaceholder } from '@/lib/placeholder-audio';
+import { LearningModal } from '@/components/ui/learning-modal';
 
-// Helper to find audio URL by ID
-const getAudioUrl = (id: string) => PlaceHolderAudio.find(a => a.id === id)?.audioUrl;
 
 export default function Home() {
   const [isSoundMuted, setIsSoundMuted] = useState(true);
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
   const [isClient, setIsClient] = useState(false);
+  const [isLearningModalOpen, setIsLearningModalOpen] = useState(true);
 
   useEffect(() => {
     setIsClient(true);
@@ -28,34 +26,62 @@ export default function Home() {
   }, [isSoundMuted]);
 
   const handleStartMission = useCallback(() => {
-    // Start ambient sound, but respect the muted state.
+    // This is called when the learning modal is closed.
+    // We will start the ambient and proximity sounds here, but they will obey the mute state.
     const ambientAudio = audioRefs.current.ambient;
+    const proximityAudio = audioRefs.current.proximity;
+    const throttleAudio = audioRefs.current.throttle;
+    
     if (ambientAudio) {
       ambientAudio.muted = isSoundMuted;
-      if (!isSoundMuted) {
-          ambientAudio.play().catch(e => console.error('Ambient audio play failed:', e));
-      }
+      if (!isSoundMuted) ambientAudio.play().catch(e => {}); 
     }
+    if (proximityAudio) {
+      proximityAudio.muted = isSoundMuted;
+      if (!isSoundMuted) proximityAudio.play().catch(e => {});
+    }
+    if (throttleAudio) {
+        throttleAudio.muted = isSoundMuted;
+        if (!isSoundMuted) throttleAudio.play().catch(e => {});
+    }
+    setIsLearningModalOpen(false);
   }, [isSoundMuted]);
 
   // Effect to handle audio playback when isSoundMuted changes
   useEffect(() => {
     Object.values(audioRefs.current).forEach(audio => {
       if (audio) {
+        const wasMuted = audio.muted;
         audio.muted = isSoundMuted;
-        if (!isSoundMuted && audio.loop) {
-          playAudio(audio);
-        } else if (isSoundMuted) {
-          audio.pause();
+        // If unmuting, and the audio is a looping one, start playing.
+        if (wasMuted && !isSoundMuted && audio.loop && !isLearningModalOpen) {
+            audio.play().catch(e => console.error(`Audio play failed for ${audio.id}:`, e));
+        } else if (!wasMuted && isSoundMuted) {
+            // If it's a looping sound, we pause it when muted.
+            if(audio.loop) {
+                audio.pause();
+            }
         }
       }
     });
-  }, [isSoundMuted, playAudio]);
+  }, [isSoundMuted, isLearningModalOpen]);
 
 
   const onToggleSound = useCallback(() => {
-    setIsSoundMuted(prevMuted => !prevMuted);
-  }, []);
+    setIsSoundMuted(prevMuted => {
+      const newMuted = !prevMuted;
+      // If we are unmuting, make sure looping sounds start
+      if (newMuted === false && !isLearningModalOpen) {
+          const ambient = audioRefs.current.ambient;
+          const proximity = audioRefs.current.proximity;
+          const throttle = audioRefs.current.throttle;
+          if (ambient && ambient.paused) ambient.play().catch(e => {});
+          if (proximity && proximity.paused) proximity.play().catch(e => {});
+          if (throttle && throttle.paused) throttle.play().catch(e => {});
+      }
+      return newMuted;
+    });
+  }, [isLearningModalOpen]);
 
   const playClickSound = useCallback(() => {
     const clickAudio = audioRefs.current.click;
@@ -101,7 +127,7 @@ export default function Home() {
           <audio 
             id="audio-ambient"
             ref={el => (audioRefs.current.ambient = el)} 
-            src={getAudioUrl('space-ambient')} 
+            src="/audio/deep-space.mp3" 
             loop 
             preload="auto"
             onLoadedData={() => { if(audioRefs.current.ambient) audioRefs.current.ambient.volume = 0.3; }}
@@ -110,7 +136,7 @@ export default function Home() {
           <audio 
             id="audio-scan"
             ref={el => (audioRefs.current.scan = el)} 
-            src={getAudioUrl('scan-effect')} 
+            src="/audio/scanner-sound-effect.mp3" 
             preload="auto"
             onLoadedData={() => { if(audioRefs.current.scan) audioRefs.current.scan.volume = 0.8; }}
             onError={handleAudioError}
@@ -118,7 +144,7 @@ export default function Home() {
           <audio 
             id="audio-proximity"
             ref={el => (audioRefs.current.proximity = el)} 
-            src={getAudioUrl('proximity-hum')} 
+            src="/audio/ambient-hum-2s.mp3" 
             loop 
             preload="auto"
             onLoadedData={() => { if(audioRefs.current.proximity) audioRefs.current.proximity.volume = 0; }}
@@ -127,7 +153,7 @@ export default function Home() {
           <audio 
             id="audio-click"
             ref={el => (audioRefs.current.click = el)} 
-            src={getAudioUrl('ui-click')} 
+            src="/audio/ui-click-43196.mp3" 
             preload="auto"
             onLoadedData={() => { if(audioRefs.current.click) audioRefs.current.click.volume = 0.5; }}
             onError={handleAudioError}
@@ -135,7 +161,7 @@ export default function Home() {
           <audio 
             id="audio-throttle"
             ref={el => (audioRefs.current.throttle = el)} 
-            src={getAudioUrl('ship-throttle')} 
+            src="/audio/star-trek-tng-engine-hum-short.mp3" 
             loop 
             preload="auto"
             onLoadedData={() => { if(audioRefs.current.throttle) audioRefs.current.throttle.volume = 0; }}
@@ -150,8 +176,8 @@ export default function Home() {
         updateProximityVolume={updateProximityVolume}
         updateThrottleSound={updateThrottleSound}
         playClickSound={playClickSound}
-        onStartMission={handleStartMission}
       />
+       <LearningModal isOpen={isLearningModalOpen} onClose={handleStartMission} />
     </main>
   );
 }
