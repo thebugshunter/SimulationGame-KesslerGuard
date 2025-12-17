@@ -606,16 +606,20 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
     };
     animate();
 
-    const onResize = () => {
-      camera.aspect = currentMount.clientWidth / currentMount.clientHeight;
+    const resizeObserver = new ResizeObserver(entries => {
+      const { width, height } = entries[0].contentRect;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(currentMount.clientWidth, currentMount.clientHeight);
-    };
-    window.addEventListener('resize', onResize);
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(window.devicePixelRatio);
+    });
+
+    resizeObserver.observe(currentMount);
+
 
     return () => {
-      window.removeEventListener('resize', onResize);
-      if (currentMount.contains(renderer.domElement)) {
+      resizeObserver.disconnect();
+      if (currentMount && currentMount.contains(renderer.domElement)) {
         currentMount.removeChild(renderer.domElement);
       }
       renderer.dispose();
