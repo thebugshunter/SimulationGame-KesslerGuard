@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js';
 import { type SpaceObject, spaceObjects, type SpaceObjectType } from '@/lib/space-objects';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import type { useGameControls } from '@/hooks/use-game-controls';
 import type { CollisionWarning } from '@/components/ui/collision-avoidance-system';
 
@@ -222,44 +221,17 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
     const sunCorona = new THREE.Mesh(coronaGeometry, coronaMaterial);
     sunCorona.position.copy(sunLight.position);
     scene.add(sunCorona);
-
-
-    // Textures
-    const loader = new THREE.TextureLoader();
-    const earthTextureUrl = PlaceHolderImages.find(img => img.id === 'earth-day-texture')?.imageUrl;
-    const earthNightTextureUrl = PlaceHolderImages.find(img => img.id === 'earth-night-texture')?.imageUrl;
-    const earthCloudsTextureUrl = PlaceHolderImages.find(img => img.id === 'earth-clouds-texture')?.imageUrl;
-    const earthSpecularTextureUrl = PlaceHolderImages.find(img => img.id === 'earth-specular-texture')?.imageUrl;
-    const moonTextureUrl = PlaceHolderImages.find(img => img.id === 'moon-texture')?.imageUrl;
-    const marsTextureUrl = PlaceHolderImages.find(img => img.id === 'mars-texture')?.imageUrl;
-    const jupiterTextureUrl = PlaceHolderImages.find(img => img.id === 'jupiter-texture')?.imageUrl;
     
     // Earth
     const earthGeometry = new THREE.SphereGeometry(30, 64, 64);
-    const earthMaterial = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
-        map: earthTextureUrl ? loader.load(earthTextureUrl) : undefined,
-        specularMap: earthSpecularTextureUrl ? loader.load(earthSpecularTextureUrl) : undefined,
-        specular: new THREE.Color('grey'),
-        shininess: 10,
-        emissiveMap: earthNightTextureUrl ? loader.load(earthNightTextureUrl) : undefined,
-        emissive: 0xffffff,
-        emissiveIntensity: 1.0
+    const earthMaterial = new THREE.MeshStandardMaterial({
+        color: 0x4682B4, // A nice blue for the ocean
+        roughness: 0.8,
+        metalness: 0.1,
     });
     const earth = new THREE.Mesh(earthGeometry, earthMaterial);
     earth.position.set(0, 0, 0);
     scene.add(earth);
-
-    // Earth clouds
-    const cloudsGeometry = new THREE.SphereGeometry(30.2, 64, 64);
-    const cloudsMaterial = new THREE.MeshPhongMaterial({
-        map: earthCloudsTextureUrl ? loader.load(earthCloudsTextureUrl) : undefined,
-        transparent: true,
-        opacity: 0.4,
-    });
-    const clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
-    clouds.position.copy(earth.position);
-    scene.add(clouds);
 
     // Earth Atmosphere
     const atmosphereGeometry = new THREE.SphereGeometry(30.5, 64, 64);
@@ -300,7 +272,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
     scene.add(moonOrbit);
     const moonGeometry = new THREE.SphereGeometry(8, 32, 32);
     const moonMaterial = new THREE.MeshStandardMaterial({
-        map: moonTextureUrl ? loader.load(moonTextureUrl) : undefined,
+        color: 0x888888,
         roughness: 0.9,
     });
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
@@ -313,34 +285,13 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
     scene.add(marsOrbit);
     const marsGeometry = new THREE.SphereGeometry(16, 64, 64);
     const marsMaterial = new THREE.MeshStandardMaterial({
-        map: marsTextureUrl ? loader.load(marsTextureUrl) : undefined,
+        color: 0xE57373, // Reddish color for Mars
         roughness: 0.9,
     });
     const mars = new THREE.Mesh(marsGeometry, marsMaterial);
     mars.position.set(400, 0, 0);
     marsOrbit.add(mars);
     marsOrbit.position.copy(earth.position);
-
-    // Jupiter
-    const jupiterOrbit = new THREE.Group();
-    scene.add(jupiterOrbit);
-    const jupiterGeometry = new THREE.SphereGeometry(50, 64, 64);
-    const jupiterMaterial = new THREE.MeshStandardMaterial({
-        map: jupiterTextureUrl ? loader.load(jupiterTextureUrl) : undefined,
-        roughness: 0.95,
-    });
-    const jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
-    jupiter.position.set(800, 0, 0);
-    jupiterOrbit.add(jupiter);
-    jupiterOrbit.position.copy(earth.position);
-    
-    // Jupiter's Ring
-    const ringGeometry = new THREE.RingGeometry(60, 75, 64);
-    const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x8c7b6c, side: THREE.DoubleSide, transparent: true, opacity: 0.7 });
-    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    ring.rotation.x = Math.PI / 2.5;
-    jupiter.add(ring);
-
 
     // Starfield
     const starVertices = [];
@@ -649,14 +600,11 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       });
       
       earth.rotation.y += delta * 0.02;
-      clouds.rotation.y += delta * 0.022;
       atmosphere.rotation.y += delta * 0.022;
       moonOrbit.rotation.y += delta * 0.01;
       moon.rotation.y += delta * 0.05;
       marsOrbit.rotation.y += delta * 0.005;
       mars.rotation.y += delta * 0.04;
-      jupiterOrbit.rotation.y += delta * 0.002;
-      jupiter.rotation.y += delta * 0.02;
       
       stars.rotation.y += delta * 0.002;
 
@@ -688,3 +636,5 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
 
   return <div ref={mountRef} className="h-full w-full" />;
 }
+
+    
