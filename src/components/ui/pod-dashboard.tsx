@@ -22,21 +22,16 @@ const Reticle = () => (
 );
 
 interface PodDashboardProps {
-  onToggleTerminal: () => void;
   onToolToggle: (tool: ActiveTool) => void;
   activeTool: ActiveTool;
   playClickSound: () => void;
 }
 
 
-export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool }: PodDashboardProps) {
+export function PodDashboard({ onToolToggle, activeTool }: PodDashboardProps) {
 
   const handleToolClick = (tool: ActiveTool) => {
     onToolToggle(tool);
-  }
-
-  const handleToggleTerminalClick = () => {
-    onToggleTerminal();
   }
 
   const getToolVariant = (tool: ActiveTool) => {
@@ -82,14 +77,6 @@ export function PodDashboard({ onToggleTerminal, onToolToggle, activeTool }: Pod
                     )}>
                     <Flame className="h-full w-full"/>
                     <span className="sr-only">Plasma Burner</span>
-                </Button>
-            </div>
-
-            {/* Right Side Buttons */}
-            <div className="flex items-end gap-1 md:gap-2">
-                <Button onClick={handleToggleTerminalClick} variant="outline" className="h-12 md:h-16 gap-1 md:gap-2 rounded-lg border-accent/50 px-2 md:px-4 text-accent hover:bg-accent/10 hover:text-accent">
-                    <Menu className="h-5 w-5 md:h-8 md:w-8" />
-                    <span className="hidden sm:inline text-base md:text-xl">DATA</span>
                 </Button>
             </div>
         </div>

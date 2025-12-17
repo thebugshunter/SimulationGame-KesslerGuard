@@ -18,6 +18,7 @@ interface OrbitalSyncAppProps {
   updateProximityVolume: (distance: number | null) => void;
   updateThrottleSound: (thrust: number) => void;
   playClickSound: () => void;
+  isTerminalOpen: boolean;
 }
 
 const initialFilters = {
@@ -27,8 +28,7 @@ const initialFilters = {
   Comet: true,
 };
 
-export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound }: OrbitalSyncAppProps) {
-  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound, isTerminalOpen }: OrbitalSyncAppProps) {
   const [selectedObject, setSelectedObject] = useState<SpaceObject | null>(null);
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);
@@ -47,11 +47,6 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
         }
     }
   });
-
-  const handleToggleTerminal = () => {
-    setIsTerminalOpen(prev => !prev);
-    playClickSound();
-  };
 
   const handleToolToggle = (tool: ActiveTool) => {
     const newTool = activeTool === tool ? null : tool;
@@ -109,7 +104,6 @@ export function OrbitalSyncApp({ audioRefs, isSoundMuted, updateProximityVolume,
           {/* Center Dashboard - takes up remaining space */}
           <div className="pointer-events-auto flex-1 pb-1 md:pb-0 min-w-0">
               <PodDashboard 
-                  onToggleTerminal={handleToggleTerminal} 
                   onToolToggle={handleToolToggle}
                   activeTool={activeTool}
                   playClickSound={playClickSound}

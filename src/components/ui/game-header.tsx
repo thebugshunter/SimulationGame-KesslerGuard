@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Rocket, Volume2, VolumeX, Fuel, Zap, Compass, AlertTriangle, Settings } from 'lucide-react';
+import { Rocket, Volume2, VolumeX, Fuel, Zap, Compass, AlertTriangle, Settings, Menu } from 'lucide-react';
 import { Button } from './button';
 
 interface StatusItemProps {
@@ -33,9 +33,10 @@ const StatusItem = ({ icon, label, value, unit, variant = 'default' }: StatusIte
 interface GameHeaderProps {
   isSoundMuted: boolean;
   onToggleSound: () => void;
+  onToggleTerminal: () => void;
 }
 
-export function GameHeader({ isSoundMuted, onToggleSound }: GameHeaderProps) {
+export function GameHeader({ isSoundMuted, onToggleSound, onToggleTerminal }: GameHeaderProps) {
   const [kesslerScore, setKesslerScore] = useState(0);
   const [gravityWarning, setGravityWarning] = useState(false);
 
@@ -76,6 +77,15 @@ export function GameHeader({ isSoundMuted, onToggleSound }: GameHeaderProps) {
       </div>
 
       <div className="flex items-center gap-2 order-2 sm:order-3 self-center">
+        <Button 
+          onClick={onToggleTerminal} 
+          variant="ghost" 
+          size="icon" 
+          className="text-accent hover:bg-accent/10 hover:text-accent"
+        >
+            <Menu className="h-6 w-6" />
+            <span className="sr-only">Toggle Data Terminal</span>
+        </Button>
         <Button 
           onClick={onToggleSound} 
           variant="ghost" 

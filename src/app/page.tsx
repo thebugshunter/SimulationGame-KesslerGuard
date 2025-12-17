@@ -11,19 +11,22 @@ export default function Home() {
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
   const [isClient, setIsClient] = useState(false);
   const [isLearningModalOpen, setIsLearningModalOpen] = useState(true);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   const handleStartMission = useCallback(() => {
-    Object.values(audioRefs.current).forEach(audio => {
-        if (audio && audio.loop && audio.paused) {
-            audio.play().catch(e => {}); // Attempt to play, will obey mute state
-        }
-    });
+    if (!isSoundMuted) {
+        Object.values(audioRefs.current).forEach(audio => {
+            if (audio && audio.loop && audio.paused) {
+                audio.play().catch(e => {}); // Attempt to play, will obey mute state
+            }
+        });
+    }
     setIsLearningModalOpen(false);
-  }, []);
+  }, [isSoundMuted]);
 
   // Effect to handle audio playback when isSoundMuted changes
   useEffect(() => {
@@ -85,6 +88,11 @@ export default function Home() {
     const volume = Math.max(0, Math.min(1, thrust)) * 0.7; // Max volume 70%
     throttleAudio.volume = volume;
   }, []);
+  
+  const handleToggleTerminal = () => {
+    setIsTerminalOpen(prev => !prev);
+    playClickSound();
+  };
 
 
   return (
@@ -131,13 +139,18 @@ export default function Home() {
           />
         </>
       )}
-      <GameHeader isSoundMuted={isSoundMuted} onToggleSound={onToggleSound} />
+      <GameHeader 
+        isSoundMuted={isSoundMuted} 
+        onToggleSound={onToggleSound} 
+        onToggleTerminal={handleToggleTerminal}
+      />
       <OrbitalSyncApp 
         audioRefs={audioRefs} 
         isSoundMuted={isSoundMuted}
         updateProximityVolume={updateProximityVolume}
         updateThrottleSound={updateThrottleSound}
         playClickSound={playClickSound}
+        isTerminalOpen={isTerminalOpen}
       />
        <LearningModal isOpen={isLearningModalOpen} onClose={handleStartMission} />
     </main>
