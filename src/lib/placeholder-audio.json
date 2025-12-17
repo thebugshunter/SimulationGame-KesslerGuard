@@ -4,27 +4,27 @@
     {
       "id": "space-ambient",
       "description": "A low, deep, and continuous ambient hum of deep space.",
-      "audioUrl": "https://cdn.pixabay.com/download/audio/2022/10/14/audio_39a88ce387.mp3"
+      "audioUrl": "https://kenney.nl/assets/digital-audio/space-ambient.mp3"
     },
     {
       "id": "scan-effect",
       "description": "A short, futuristic scanning sound effect.",
-      "audioUrl": "https://cdn.pixabay.com/download/audio/2022/03/10/audio_c1c302914a.mp3"
+      "audioUrl": "https://kenney.nl/assets/digital-audio/sci-fi-bleep.mp3"
     },
     {
       "id": "proximity-hum",
       "description": "A low-frequency hum that can be used to indicate proximity to a large object.",
-      "audioUrl": "https://cdn.pixabay.com/download/audio/2023/09/22/audio_14187e10b1.mp3"
+      "audioUrl": "https://kenney.nl/assets/digital-audio/engine-hum.mp3"
     },
     {
       "id": "ui-click",
       "description": "A simple, clean click sound for UI interactions.",
-      "audioUrl": "https://cdn.pixabay.com/download/audio/2022/03/15/audio_28b18a3692.mp3"
+      "audioUrl": "https://kenney.nl/assets/ui-audio/click-3.mp3"
     },
     {
       "id": "ship-throttle",
       "description": "The continuous hum of a spaceship's engine throttling up or down.",
-      "audioUrl": "https://cdn.pixabay.com/download/audio/2024/02/09/audio_1e31b6379c.mp3"
+      "audioUrl": "https://kenney.nl/assets/digital-audio/engine-loop.mp3"
     }
   ]
 }
