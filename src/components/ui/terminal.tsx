@@ -9,7 +9,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
-import { ShieldAlert, Bot, Users, Filter, ShieldCheck } from 'lucide-react';
+import { ShieldAlert, Bot, Users, Filter } from 'lucide-react';
 
 interface TerminalProps {
   isOpen: boolean;
@@ -18,8 +18,6 @@ interface TerminalProps {
   playClickSound: () => void;
   filters: Record<SpaceObjectType, boolean>;
   onFilterChange: (objectType: SpaceObjectType, isVisible: boolean) => void;
-  isAutoAvoidanceOn: boolean;
-  onAutoAvoidanceChange: (isOn: boolean) => void;
 }
 
 const ObjectDetails = ({ obj }: { obj: SpaceObject }) => (
@@ -50,7 +48,7 @@ const ScanResultItem = ({ obj }: { obj: SpaceObject }) => (
     </div>
 );
 
-export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, filters, onFilterChange, isAutoAvoidanceOn, onAutoAvoidanceChange }: TerminalProps) {
+export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, filters, onFilterChange }: TerminalProps) {
   const objectTypes: SpaceObjectType[] = ['Satellite', 'Debris', 'Asteroid', 'Comet'];
   
   const handleFilterChangeWithSound = (type: SpaceObjectType, checked: boolean) => {
@@ -100,39 +98,21 @@ export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, 
                         <TabsContent value="filters" className="m-0">
                             <Card className="bg-transparent border-0 shadow-none">
                                 <CardHeader className="p-1">
-                                    <CardTitle>Systems & Filters</CardTitle>
-                                    <CardDescription>Configure visibility and automated systems.</CardDescription>
+                                    <CardTitle>Display Filters</CardTitle>
+                                    <CardDescription>Configure object visibility on the main screen.</CardDescription>
 
                                 </CardHeader>
-                                <CardContent className="p-1 space-y-4">
-                                  <div className="p-2 rounded-md bg-muted/30">
-                                      <div className="flex items-center justify-between">
-                                        <Label htmlFor="auto-avoidance" className="flex items-center gap-2 text-sm">
-                                            <ShieldCheck className="h-4 w-4 text-accent" />
-                                            Auto-Avoidance System
-                                        </Label>
+                                <CardContent className="p-1 space-y-2">
+                                  {objectTypes.map(type => (
+                                    <div key={type} className="flex items-center justify-between p-2 rounded-md hover:bg-muted/30">
+                                        <Label htmlFor={`filter-${type}`} className="text-sm">{type}s</Label>
                                         <Switch
-                                            id="auto-avoidance"
-                                            checked={isAutoAvoidanceOn}
-                                            onCheckedChange={onAutoAvoidanceChange}
+                                            id={`filter-${type}`}
+                                            checked={filters[type]}
+                                            onCheckedChange={(checked) => handleFilterChangeWithSound(type, checked)}
                                         />
-                                      </div>
-                                      <p className="text-xs text-muted-foreground mt-1 pl-6">Automatically displays collision warnings. Power intensive.</p>
-                                  </div>
-
-                                  <div className="pt-2 border-t border-border">
-                                      <h4 className="mb-2 font-semibold text-sm">Display Filters</h4>
-                                      {objectTypes.map(type => (
-                                        <div key={type} className="flex items-center justify-between p-2 rounded-md ">
-                                            <Label htmlFor={`filter-${type}`} className="text-sm">{type}s</Label>
-                                            <Switch
-                                                id={`filter-${type}`}
-                                                checked={filters[type]}
-                                                onCheckedChange={(checked) => handleFilterChangeWithSound(type, checked)}
-                                            />
-                                        </div>
-                                      ))}
-                                  </div>
+                                    </div>
+                                  ))}
                                 </CardContent>
                             </Card>
                         </TabsContent>

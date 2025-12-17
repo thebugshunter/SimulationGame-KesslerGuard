@@ -137,13 +137,6 @@ export default function Home() {
             preload="auto"
             onLoadedData={(e) => { if(e.currentTarget) e.currentTarget.volume = 0; }}
           />
-           <audio
-            id="audio-collision-alarm"
-            ref={(el) => (audioRefs.current.collisionAlarm = el)}
-            src="/audio/collision-alarm.mp3"
-            loop
-            preload="auto"
-          />
         </>
       )}
       <GameHeader 

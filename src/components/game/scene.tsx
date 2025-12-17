@@ -6,7 +6,6 @@ import * as THREE from 'three';
 import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js';
 import { type SpaceObject, spaceObjects, type SpaceObjectType } from '@/lib/space-objects';
 import type { useGameControls } from '@/hooks/use-game-controls';
-import type { CollisionWarning } from '@/components/ui/collision-avoidance-system';
 
 interface SceneProps {
   setSelectedObject: (object: SpaceObject | null) => void;
@@ -15,8 +14,6 @@ interface SceneProps {
   updateProximityVolume: (distance: number | null) => void;
   selectedObjectId: string | null;
   filters: Record<SpaceObjectType, boolean>;
-  isAutoAvoidanceOn: boolean;
-  setCollisionWarning: (warning: CollisionWarning | null) => void;
 }
 
 function createSatellite(): THREE.Group {
@@ -84,7 +81,7 @@ function createAsteroid(): THREE.Mesh {
     return asteroid;
 }
 
-export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, isAutoAvoidanceOn, setCollisionWarning }: SceneProps) {
+export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters }: SceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const linearVelocity = useRef(new THREE.Vector3());
   const selectionIndicatorRef = useRef<THREE.Group | null>(null);
@@ -345,10 +342,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       orbit.userData.rotationSpeed = (Math.random() - 0.5) * 0.1;
       
       scene.add(orbit);
-      object3d.userData = {
-        ...obj,
-        lastPosition: object3d.position.clone(),
-      };
+      object3d.userData = obj;
       objectMeshesRef.current.push(object3d);
     });
 
@@ -521,68 +515,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             burnerEffectRef.current.scale.set(1 + Math.sin(time * 50) * 0.1, 1, 1 + Math.sin(time * 50) * 0.1);
         }
       }
-
-       // --- Collision Avoidance ---
-      let currentCollisionWarning: CollisionWarning | null = null;
-      if (isAutoAvoidanceOn && delta > 0) { // Added delta > 0 check
-        let closestThreat: { distance: number; object: THREE.Object3D } | null = null;
-        
-        for (const mesh of objectMeshesRef.current) {
-          if (!mesh.visible || (mesh.userData as SpaceObject).type === 'Debris') continue;
-
-          const worldPosition = new THREE.Vector3();
-          mesh.getWorldPosition(worldPosition);
-          const distance = camera.position.distanceTo(worldPosition);
-
-          if (distance < 30) { // Collision check radius
-            const relativeVelocity = new THREE.Vector3().copy(linearVelocity.current);
-            // Ensure lastPosition is a Vector3
-            if (!(mesh.userData.lastPosition instanceof THREE.Vector3)) {
-                mesh.userData.lastPosition = new THREE.Vector3().copy(worldPosition);
-            }
-            const objectVelocity = new THREE.Vector3().copy(worldPosition).sub(mesh.userData.lastPosition).divideScalar(delta);
-            relativeVelocity.sub(objectVelocity);
-
-            const relativePosition = new THREE.Vector3().copy(worldPosition).sub(camera.position);
-            
-            if (relativeVelocity.lengthSq() > 0) { // Avoid division by zero
-                const timeToCollision = -relativePosition.dot(relativeVelocity) / relativeVelocity.lengthSq();
-
-                if (timeToCollision > 0 && timeToCollision < 2) { // 2 seconds to impact
-                  if (!closestThreat || distance < closestThreat.distance) {
-                    closestThreat = { distance, object: mesh };
-                  }
-                }
-            }
-          }
-          mesh.userData.lastPosition.copy(worldPosition);
-        }
-
-        if (closestThreat) {
-          const threatPosition = new THREE.Vector3();
-          closestThreat.object.getWorldPosition(threatPosition);
-          
-          const cameraDirection = camera.getWorldDirection(new THREE.Vector3());
-          const threatVector = new THREE.Vector3().subVectors(threatPosition, camera.position);
-          
-          // A simple escape vector: perpendicular to the threat vector, on the camera's XY plane
-          const escapeVector = new THREE.Vector3(-cameraDirection.y, cameraDirection.x, 0).applyQuaternion(camera.quaternion).normalize();
-
-
-          // Project threat onto camera's local XY plane to get screen position
-          const localThreat = camera.worldToLocal(threatPosition.clone()).normalize();
-
-          currentCollisionWarning = {
-            threatScreenX: localThreat.x,
-            threatScreenY: localThreat.y,
-            escapeScreenX: escapeVector.x,
-            escapeScreenY: escapeVector.y,
-            urgency: Math.max(0.2, 1 - (closestThreat.distance / 30))
-          };
-        }
-      }
-      setCollisionWarning(currentCollisionWarning);
-
+      
       // Proximity check for sounds
       let closestDistance = null;
       for (const mesh of objectMeshesRef.current) {
@@ -640,7 +573,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       scene.clear();
       objectMeshesRef.current = [];
     };
-  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, isAutoAvoidanceOn, setCollisionWarning]);
+  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters]);
 
   return <div ref={mountRef} className="h-full w-full" />;
 }
