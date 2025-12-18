@@ -7,7 +7,6 @@ import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflar
 import { type SpaceObject, spaceObjects, type SpaceObjectType } from '@/lib/space-objects';
 import type { useGameControls } from '@/hooks/use-game-controls';
 import type { CollisionWarning } from '@/components/ui/collision-avoidance-system';
-import type { ShipState } from '@/components/game/ship-state';
 
 
 interface SceneProps {
@@ -18,7 +17,6 @@ interface SceneProps {
   selectedObjectId: string | null;
   filters: Record<SpaceObjectType, boolean>;
   setCollisionWarning: (warning: CollisionWarning | null) => void;
-  shipStateRef: React.MutableRefObject<ShipState>;
 }
 
 function createSatellite(): THREE.Group {
@@ -86,7 +84,7 @@ function createAsteroid(): THREE.Mesh {
     return asteroid;
 }
 
-export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, shipStateRef }: SceneProps) {
+export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning }: SceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const linearVelocity = useRef(new THREE.Vector3());
   const selectionIndicatorRef = useRef<THREE.Group | null>(null);
@@ -147,11 +145,8 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
         uniforms: coronaUniforms,
         vertexShader: `
             varying vec3 vNormal;
-            varying vec3 vWorldPosition;
             void main() {
                 vNormal = normalize( normalMatrix * normal );
-                vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-                vWorldPosition = worldPosition.xyz;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
             }
         `,
@@ -161,8 +156,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             uniform vec3 glowColor;
             uniform float time;
             varying vec3 vNormal;
-            varying vec3 vWorldPosition;
-
+            
             // 2D simplex noise function
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
             vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -215,7 +209,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             }
 
             void main() {
-                vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
+                vec3 viewDirection = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
                 float intensity = pow(c - dot(vNormal, viewDirection), p);
                 float noise = 1.0 + snoise(vNormal * 4.0 + time * 0.5) * 0.1;
                 gl_FragColor = vec4(glowColor * noise, 1.0) * intensity;
@@ -250,11 +244,8 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
         },
         vertexShader: `
             varying vec3 vNormal;
-            varying vec3 vWorldPosition;
             void main() {
                 vNormal = normalize( normalMatrix * normal );
-                vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-                vWorldPosition = worldPosition.xyz;
                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
             }
         `,
@@ -263,9 +254,8 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             uniform float p;
             uniform vec3 glowColor;
             varying vec3 vNormal;
-            varying vec3 vWorldPosition;
             void main() {
-                vec3 viewDirection = normalize(cameraPosition - vWorldPosition);
+                vec3 viewDirection = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
                 float intensity = pow( c - dot( vNormal, viewDirection ), p );
                 gl_FragColor = vec4( glowColor, 1.0 ) * intensity;
             }
@@ -470,17 +460,6 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
           new THREE.Euler(angularVelocity.x, angularVelocity.y, angularVelocity.z, 'YXZ')
       );
       camera.quaternion.premultiply(quaternionDelta);
-
-      // Pass orientation to UI via ref to avoid re-renders
-      const earthRelativeOrientation = new THREE.Euler().setFromQuaternion(
-        camera.quaternion.clone().multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), earth.rotation.y).invert()),
-        'YXZ'
-      );
-      if (shipStateRef.current) {
-        shipStateRef.current.orientation.copy(earthRelativeOrientation);
-        shipStateRef.current.position.copy(camera.position);
-        shipStateRef.current.velocity.copy(linearVelocity.current);
-      }
 
       // Reset mouse delta after applying it
       controls.resetMouseDelta();
@@ -691,7 +670,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       scene.clear();
       objectMeshesRef.current = [];
     };
-  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, shipStateRef]);
+  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning]);
 
   return <div ref={mountRef} className="h-full w-full" />;
 }

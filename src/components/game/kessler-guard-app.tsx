@@ -9,7 +9,6 @@ import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
 import { useGameControls } from '@/hooks/use-game-controls';
 import { JoystickControls } from '@/components/ui/joystick-controls';
 import { CollisionAvoidanceSystem, type CollisionWarning } from '@/components/ui/collision-avoidance-system';
-import { ShipStateProvider, useShipState } from '@/components/game/ship-state';
 
 export type ActiveTool = 'Scan' | 'Magnet' | 'Burner' | null;
 export type JoystickMode = 'move' | 'look' | null;
@@ -30,14 +29,13 @@ const initialFilters = {
   Comet: true,
 };
 
-const KesslerGuardAppContent = ({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound, isTerminalOpen }: KesslerGuardAppProps) => {
+export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume, updateThrottleSound, playClickSound, isTerminalOpen }: KesslerGuardAppProps) {
   const [selectedObject, setSelectedObject] = useState<SpaceObject | null>(null);
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);
   const [activeTool, setActiveTool] = useState<ActiveTool>(null);
   const [collisionWarning, setCollisionWarning] = useState<CollisionWarning | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
-  const { shipStateRef } = useShipState();
 
   const controls = useGameControls({
     targetRef: sceneRef, 
@@ -93,7 +91,6 @@ const KesslerGuardAppContent = ({ audioRefs, isSoundMuted, updateProximityVolume
           selectedObjectId={selectedObject?.id ?? null}
           filters={filters}
           setCollisionWarning={setCollisionWarning}
-          shipStateRef={shipStateRef}
         />
       </div>
       
@@ -138,14 +135,5 @@ const KesslerGuardAppContent = ({ audioRefs, isSoundMuted, updateProximityVolume
         />
       </div>
     </>
-  );
-}
-
-
-export function KesslerGuardApp(props: KesslerGuardAppProps) {
-  return (
-    <ShipStateProvider>
-      <KesslerGuardAppContent {...props} />
-    </ShipStateProvider>
   );
 }

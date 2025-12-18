@@ -10,8 +10,6 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
 import { ShieldAlert, Bot, Users, Filter, Info } from 'lucide-react';
-import { Gyroscope } from './gyroscope';
-import { useShipState } from '@/components/game/ship-state';
 
 interface TerminalProps {
   isOpen: boolean;
@@ -50,31 +48,6 @@ const ScanResultItem = ({ obj }: { obj: SpaceObject }) => (
     </div>
 );
 
-const ShipStatus = () => {
-    const { shipState } = useShipState();
-    const velocity = shipState.velocity.length();
-
-    return (
-        <div className="space-y-4">
-            <div>
-                <h4 className="mb-2 font-semibold">Orientation Gyroscope</h4>
-                <div className="flex justify-center">
-                    <Gyroscope />
-                </div>
-            </div>
-             <div className="mt-2 pt-4 border-t border-border">
-                <h4 className="mb-2 font-semibold">Telemetry</h4>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2 font-mono text-xs">
-                    <p><span className="font-semibold text-muted-foreground">Velocity:</span> {velocity.toFixed(2)} m/s</p>
-                    <p><span className="font-semibold text-muted-foreground">Position X:</span> {shipState.position.x.toFixed(2)}</p>
-                    <p><span className="font-semibold text-muted-foreground">Position Y:</span> {shipState.position.y.toFixed(2)}</p>
-                    <p><span className="font-semibold text-muted-foreground">Position Z:</span> {shipState.position.z.toFixed(2)}</p>
-                </div>
-            </div>
-        </div>
-    )
-}
-
 export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, filters, onFilterChange }: TerminalProps) {
   const objectTypes: SpaceObjectType[] = ['Satellite', 'Debris', 'Asteroid', 'Comet'];
   
@@ -105,7 +78,7 @@ export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, 
                                     <CardDescription>Real-time ship telemetry and orientation.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="p-1">
-                                    <ShipStatus />
+                                    <p className="text-muted-foreground">Gyroscope and telemetry data will be shown here.</p>
                                 </CardContent>
                             </Card>
                         </TabsContent>
