@@ -664,6 +664,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height);
+      renderer.setPixelRatio(window.devicePixelRatio);
     });
 
     resizeObserver.observe(currentMount);
