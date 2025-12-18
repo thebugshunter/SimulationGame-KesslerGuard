@@ -19,15 +19,15 @@ interface LearningModalProps {
 export function LearningModal({ isOpen, onClose }: LearningModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="w-full max-w-2xl bg-background/80 backdrop-blur-md border-accent/50 flex flex-col h-full sm:h-auto sm:max-h-[90vh]" hideCloseButton>
-        <DialogHeader>
+      <DialogContent className="w-full max-w-2xl bg-background/80 backdrop-blur-md border-accent/50 flex flex-col max-h-[90vh]" hideCloseButton>
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="font-headline text-accent text-2xl">Welcome to Kessler Guard</DialogTitle>
           <DialogDescription>
             Your mission is to help clean up low-earth orbit. You are pioneering the future of remote work, performing critical operations in space, all from Earth.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow my-4">
-          <div className="grid gap-4 pr-6 sm:grid-cols-2">
+          <div className="grid gap-6 pr-6 sm:grid-cols-2">
             <div className="flex items-start gap-4">
               <div className="rounded-md bg-muted p-2 mt-1">
                 <Move className="h-6 w-6 text-accent" />
@@ -83,7 +83,7 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
             </div>
           </div>
         </ScrollArea>
-        <DialogFooter className="mt-auto pt-4 border-t border-border/20">
+        <DialogFooter className="mt-auto pt-4 border-t border-border/20 flex-shrink-0">
           <Button onClick={onClose} className="w-full bg-accent text-background hover:bg-accent/90">Start Mission</Button>
         </DialogFooter>
       </DialogContent>
