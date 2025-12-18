@@ -19,7 +19,7 @@ interface LearningModalProps {
 export function LearningModal({ isOpen, onClose }: LearningModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-md bg-background/80 backdrop-blur-md border-accent/50 flex flex-col max-h-[90vh]" hideCloseButton>
+      <DialogContent className="w-full max-w-2xl bg-background/80 backdrop-blur-md border-accent/50 flex flex-col h-full sm:h-auto sm:max-h-[90vh]" hideCloseButton>
         <DialogHeader>
           <DialogTitle className="font-headline text-accent text-2xl">Welcome to Kessler Guard</DialogTitle>
           <DialogDescription>
@@ -27,7 +27,7 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow my-4">
-          <div className="grid gap-4 pr-6">
+          <div className="grid gap-4 pr-6 sm:grid-cols-2">
             <div className="flex items-start gap-4">
               <div className="rounded-md bg-muted p-2 mt-1">
                 <Move className="h-6 w-6 text-accent" />
@@ -72,7 +72,7 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
                 <p className="text-sm text-muted-foreground">Use your pod's tools via the dashboard. Be careful—your actions have consequences!</p>
               </div>
             </div>
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-4 sm:col-span-2">
               <div className="rounded-md bg-muted p-2 mt-1">
                 <Smartphone className="h-6 w-6 text-accent" />
               </div>
