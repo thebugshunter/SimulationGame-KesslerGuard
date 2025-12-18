@@ -47,7 +47,7 @@ const instructions = [
 export function LearningModal({ isOpen, onClose }: LearningModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="grid w-full max-w-2xl h-full max-h-[90vh] grid-rows-[auto_1fr_auto] gap-0 bg-background/80 p-0 backdrop-blur-md border-accent/50" hideCloseButton>
+      <DialogContent className="grid w-full max-w-2xl max-h-[90vh] grid-rows-[auto_minmax(0,1fr)_auto] gap-0 bg-background/80 p-0 backdrop-blur-md border-accent/50" hideCloseButton>
         <DialogHeader className="p-6 pb-4">
           <DialogTitle className="font-headline text-accent text-2xl">Welcome to Kessler Guard</DialogTitle>
           <DialogDescription>
