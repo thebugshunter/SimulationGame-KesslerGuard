@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Move, Mouse, Scan, Target, Smartphone } from 'lucide-react';
+import { Move, Mouse } from 'lucide-react';
 
 interface LearningModalProps {
   isOpen: boolean;
@@ -52,33 +52,6 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
                   <br/>
                   <span className="font-bold">[Mobile]</span> Use the right on-screen joystick to look.
                 </p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="rounded-md bg-muted p-2 mt-1">
-                <Target className="h-6 w-6 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-semibold">Targeting</h4>
-                <p className="text-sm text-muted-foreground">Click on any object to select it. The reticle in the center of your screen is your scanner's aimpoint.</p>
-              </div>
-            </div>
-             <div className="flex items-start gap-4">
-              <div className="rounded-md bg-muted p-2 mt-1">
-                <Scan className="h-6 w-6 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-semibold">Tools</h4>
-                <p className="text-sm text-muted-foreground">Use your pod's tools via the dashboard. Be careful—your actions have consequences!</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4 sm:col-span-2">
-              <div className="rounded-md bg-muted p-2 mt-1">
-                <Smartphone className="h-6 w-6 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-semibold">Mobile Experience</h4>
-                <p className="text-sm text-muted-foreground">For the best experience on a mobile device, please tilt your phone to landscape mode.</p>
               </div>
             </div>
           </div>
