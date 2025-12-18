@@ -9,12 +9,40 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Move, Mouse } from 'lucide-react';
+import { Move, Mouse, Crosshair, Wrench } from 'lucide-react';
 
 interface LearningModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const instructions = [
+  {
+    icon: Move,
+    title: 'Movement',
+    desktop: 'Use WASD to thrust, Q/E to roll, and Space/Shift to move vertically.',
+    mobile: 'Use the left on-screen joystick to move.',
+  },
+  {
+    icon: Mouse,
+    title: 'Camera Control',
+    desktop: 'Click and drag with the left mouse button to look around.',
+    mobile: 'Use the right on-screen joystick to look.',
+  },
+  {
+      icon: Crosshair,
+      title: 'Targeting & Interaction',
+      desktop: 'Click on an object to select it for analysis.',
+      mobile: 'Tap on an object to select it.',
+  },
+  {
+      icon: Wrench,
+      title: 'Tools',
+      desktop: 'Activate tools like the Scanner or Magnet using the dashboard buttons. Left-click to use the active tool.',
+      mobile: 'Tap the dashboard buttons to activate tools. The active tool is used automatically.',
+  },
+];
+
 
 export function LearningModal({ isOpen, onClose }: LearningModalProps) {
   return (
@@ -26,38 +54,34 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
             Your mission is to help clean up low-earth orbit. You are pioneering the future of remote work, performing critical operations in space, all from Earth.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-grow my-4">
-          <div className="grid gap-6 pr-6 sm:grid-cols-2">
-            <div className="flex items-start gap-4">
-              <div className="rounded-md bg-muted p-2 mt-1">
-                <Move className="h-6 w-6 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-semibold">Movement</h4>
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-bold">[Desktop]</span> Use WASD to thrust, Q/E to roll, and Space/Shift to move vertically.
-                  <br/>
-                  <span className="font-bold">[Mobile]</span> Use the left on-screen joystick to move.
-                </p>
-              </div>
+        
+        <div className="flex-grow my-4 min-h-0">
+          <ScrollArea className="h-full pr-6">
+            <div className="grid gap-6 sm:grid-cols-2">
+              {instructions.map(({ icon: Icon, title, desktop, mobile }) => (
+                <div key={title} className="flex items-start gap-4">
+                  <div className="rounded-md bg-muted p-2 mt-1">
+                    <Icon className="h-6 w-6 text-accent" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold">{title}</h4>
+                    <p className="text-sm text-muted-foreground">
+                      <span className="font-bold">[Desktop]</span> {desktop}
+                      <br />
+                      <span className="font-bold">[Mobile]</span> {mobile}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="flex items-start gap-4">
-              <div className="rounded-md bg-muted p-2 mt-1">
-                <Mouse className="h-6 w-6 text-accent" />
-              </div>
-              <div>
-                <h4 className="font-semibold">Camera Control</h4>
-                <p className="text-sm text-muted-foreground">
-                  <span className="font-bold">[Desktop]</span> Click and drag with the left mouse button to look around.
-                  <br/>
-                  <span className="font-bold">[Mobile]</span> Use the right on-screen joystick to look.
-                </p>
-              </div>
+             <div className="mt-6 text-center text-sm text-accent/80 p-2 rounded-md bg-muted/50">
+              <span className="font-bold">Mobile Tip:</span> For the best experience, please tilt your phone to landscape mode.
             </div>
-          </div>
-        </ScrollArea>
+          </ScrollArea>
+        </div>
+
         <DialogFooter className="mt-auto pt-4 border-t border-border/20 flex-shrink-0">
-          <Button onClick={onClose} className="w-full bg-accent text-background hover:bg-accent/90">Start Mission</Button>
+          <Button onClick={onClose} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">Start Mission</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
