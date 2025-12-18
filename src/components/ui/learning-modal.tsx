@@ -1,3 +1,4 @@
+
 import {
   Dialog,
   DialogContent,
@@ -25,47 +26,47 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
             Your mission is to help clean up low-earth orbit. The Kessler Syndrome is a real threat, and this simulation is a training ground for the science and engineering needed to solve it. You are pioneering the future of remote work, performing critical operations in space, all from Earth.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-grow">
-          <div className="grid gap-4 py-4 pr-4">
-            <div className="flex items-center gap-4">
-              <div className="rounded-md bg-muted p-2">
+        <ScrollArea className="flex-grow my-4">
+          <div className="grid gap-4 pr-6">
+            <div className="flex items-start gap-4">
+              <div className="rounded-md bg-muted p-2 mt-1">
                 <Move className="h-6 w-6 text-accent" />
               </div>
               <div>
                 <h4 className="font-semibold">Movement</h4>
-                <p className="text-sm text-muted-foreground">Use WASD to thrust, Space/Shift to move vertically.</p>
+                <p className="text-sm text-muted-foreground">Use WASD to thrust forward/left/back/right, and Q/E to roll. Use Space and Shift to move vertically. You can also use the on-screen joystick on mobile.</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="rounded-md bg-muted p-2">
+            <div className="flex items-start gap-4">
+              <div className="rounded-md bg-muted p-2 mt-1">
                 <Mouse className="h-6 w-6 text-accent" />
               </div>
               <div>
-                <h4 className="font-semibold">Camera</h4>
-                <p className="text-sm text-muted-foreground">Click and drag on the screen to look around.</p>
+                <h4 className="font-semibold">Camera Control</h4>
+                <p className="text-sm text-muted-foreground">On desktop, click and drag with the left mouse button to look around. On mobile, use the right joystick.</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="rounded-md bg-muted p-2">
+            <div className="flex items-start gap-4">
+              <div className="rounded-md bg-muted p-2 mt-1">
                 <Target className="h-6 w-6 text-accent" />
               </div>
               <div>
                 <h4 className="font-semibold">Targeting</h4>
-                <p className="text-sm text-muted-foreground">Click on any object to get its data in the terminal.</p>
+                <p className="text-sm text-muted-foreground">Click on any object to select it and view its data in the terminal. The reticle in the center of your screen is also your scanner's aimpoint.</p>
               </div>
             </div>
-             <div className="flex items-center gap-4">
-              <div className="rounded-md bg-muted p-2">
+             <div className="flex items-start gap-4">
+              <div className="rounded-md bg-muted p-2 mt-1">
                 <Scan className="h-6 w-6 text-accent" />
               </div>
               <div>
                 <h4 className="font-semibold">Tools</h4>
-                <p className="text-sm text-muted-foreground">Use your pod's tools to interact with objects. But be careful!</p>
+                <p className="text-sm text-muted-foreground">Use your pod's tools via the dashboard to interact with objects. But be careful—your actions have consequences!</p>
               </div>
             </div>
           </div>
         </ScrollArea>
-        <DialogFooter className="mt-auto pt-4">
+        <DialogFooter className="mt-auto pt-4 border-t border-border/20">
           <Button onClick={onClose} className="w-full bg-accent text-background hover:bg-accent/90">Start Mission</Button>
         </DialogFooter>
       </DialogContent>
