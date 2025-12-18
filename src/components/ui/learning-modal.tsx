@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Move, Mouse, Scan, Target } from 'lucide-react';
+import { Move, Mouse, Scan, Target, Smartphone } from 'lucide-react';
 
 interface LearningModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
         <DialogHeader>
           <DialogTitle className="font-headline text-accent text-2xl">Welcome to Kessler Guard</DialogTitle>
           <DialogDescription>
-            Your mission is to help clean up low-earth orbit. The Kessler Syndrome is a real threat, and this simulation is a training ground for the science and engineering needed to solve it. You are pioneering the future of remote work, performing critical operations in space, all from Earth.
+            Your mission is to help clean up low-earth orbit. You are pioneering the future of remote work, performing critical operations in space, all from Earth.
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="flex-grow my-4">
@@ -34,7 +34,11 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
               </div>
               <div>
                 <h4 className="font-semibold">Movement</h4>
-                <p className="text-sm text-muted-foreground">Use WASD to thrust forward/left/back/right, and Q/E to roll. Use Space and Shift to move vertically. You can also use the on-screen joystick on mobile.</p>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-bold">[Desktop]</span> Use WASD to thrust, Q/E to roll, and Space/Shift to move vertically.
+                  <br/>
+                  <span className="font-bold">[Mobile]</span> Use the left on-screen joystick to move.
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -43,7 +47,11 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
               </div>
               <div>
                 <h4 className="font-semibold">Camera Control</h4>
-                <p className="text-sm text-muted-foreground">On desktop, click and drag with the left mouse button to look around. On mobile, use the right joystick.</p>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-bold">[Desktop]</span> Click and drag with the left mouse button to look around.
+                  <br/>
+                  <span className="font-bold">[Mobile]</span> Use the right on-screen joystick to look.
+                </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -52,7 +60,7 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
               </div>
               <div>
                 <h4 className="font-semibold">Targeting</h4>
-                <p className="text-sm text-muted-foreground">Click on any object to select it and view its data in the terminal. The reticle in the center of your screen is also your scanner's aimpoint.</p>
+                <p className="text-sm text-muted-foreground">Click on any object to select it. The reticle in the center of your screen is your scanner's aimpoint.</p>
               </div>
             </div>
              <div className="flex items-start gap-4">
@@ -61,7 +69,16 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
               </div>
               <div>
                 <h4 className="font-semibold">Tools</h4>
-                <p className="text-sm text-muted-foreground">Use your pod's tools via the dashboard to interact with objects. But be careful—your actions have consequences!</p>
+                <p className="text-sm text-muted-foreground">Use your pod's tools via the dashboard. Be careful—your actions have consequences!</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="rounded-md bg-muted p-2 mt-1">
+                <Smartphone className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Mobile Experience</h4>
+                <p className="text-sm text-muted-foreground">For the best experience on a mobile device, please tilt your phone to landscape mode.</p>
               </div>
             </div>
           </div>
