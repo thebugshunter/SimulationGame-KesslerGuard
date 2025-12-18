@@ -9,6 +9,7 @@ import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
 import { useGameControls } from '@/hooks/use-game-controls';
 import { JoystickControls } from '@/components/ui/joystick-controls';
 import { CollisionAvoidanceSystem, type CollisionWarning } from '@/components/ui/collision-avoidance-system';
+import type { Euler } from 'three';
 
 export type ActiveTool = 'Scan' | 'Magnet' | 'Burner' | null;
 export type JoystickMode = 'move' | 'look' | null;
@@ -35,6 +36,7 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);
   const [activeTool, setActiveTool] = useState<ActiveTool>(null);
   const [collisionWarning, setCollisionWarning] = useState<CollisionWarning | null>(null);
+  const [shipOrientation, setShipOrientation] = useState<Euler | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   
   const controls = useGameControls({
@@ -91,6 +93,7 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
           selectedObjectId={selectedObject?.id ?? null}
           filters={filters}
           setCollisionWarning={setCollisionWarning}
+          setShipOrientation={setShipOrientation}
         />
       </div>
       
@@ -112,6 +115,7 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
                   onToolToggle={handleToolToggle}
                   activeTool={activeTool}
                   playClickSound={playClickSound}
+                  shipOrientation={shipOrientation}
               />
           </div>
 

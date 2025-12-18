@@ -17,6 +17,7 @@ interface SceneProps {
   selectedObjectId: string | null;
   filters: Record<SpaceObjectType, boolean>;
   setCollisionWarning: (warning: CollisionWarning | null) => void;
+  setShipOrientation: (orientation: THREE.Euler) => void;
 }
 
 function createSatellite(): THREE.Group {
@@ -84,7 +85,7 @@ function createAsteroid(): THREE.Mesh {
     return asteroid;
 }
 
-export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning }: SceneProps) {
+export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, setShipOrientation }: SceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const linearVelocity = useRef(new THREE.Vector3());
   const selectionIndicatorRef = useRef<THREE.Group | null>(null);
@@ -469,6 +470,14 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       );
       camera.quaternion.premultiply(quaternionDelta);
 
+      // Pass orientation to UI
+      const earthRelativeOrientation = new THREE.Euler().setFromQuaternion(
+        camera.quaternion.clone().multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), earth.rotation.y).invert()),
+        'YXZ'
+      );
+      setShipOrientation(earthRelativeOrientation);
+
+
       // Reset mouse delta after applying it
       controls.resetMouseDelta();
       
@@ -678,7 +687,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       scene.clear();
       objectMeshesRef.current = [];
     };
-  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning]);
+  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, setShipOrientation]);
 
   return <div ref={mountRef} className="h-full w-full" />;
 }

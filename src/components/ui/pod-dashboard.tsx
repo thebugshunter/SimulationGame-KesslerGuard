@@ -4,6 +4,9 @@ import { Scan, Magnet, Menu, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { ActiveTool } from '@/components/game/kessler-guard-app';
+import { Gyroscope } from './gyroscope';
+import type { Euler } from 'three';
+
 
 const CockpitFrame = () => (
     <svg viewBox="0 0 1440 900" className="absolute bottom-0 left-0 right-0 w-full h-auto pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -25,10 +28,11 @@ interface PodDashboardProps {
   onToolToggle: (tool: ActiveTool) => void;
   activeTool: ActiveTool;
   playClickSound: () => void;
+  shipOrientation: Euler | null;
 }
 
 
-export function PodDashboard({ onToolToggle, activeTool }: PodDashboardProps) {
+export function PodDashboard({ onToolToggle, activeTool, shipOrientation }: PodDashboardProps) {
 
   const handleToolClick = (tool: ActiveTool) => {
     onToolToggle(tool);
@@ -42,7 +46,7 @@ export function PodDashboard({ onToolToggle, activeTool }: PodDashboardProps) {
     <div className="relative w-full h-full">
         <CockpitFrame />
         <Reticle />
-        <div className="relative z-10 flex h-full items-end justify-center gap-1 md:gap-2 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-1 md:p-0 rounded-lg">
+        <div className="relative z-10 flex h-full items-end justify-center gap-1 md:gap-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-1 md:p-0 rounded-lg">
             {/* Tool Buttons */}
             <div className="flex items-end gap-1 md:gap-2">
                 <Button 
@@ -67,7 +71,12 @@ export function PodDashboard({ onToolToggle, activeTool }: PodDashboardProps) {
                     <Magnet className="h-full w-full"/>
                     <span className="sr-only">Magnet</span>
                 </Button>
-                <Button 
+            </div>
+            
+            <Gyroscope orientation={shipOrientation} />
+
+            <div className="flex items-end gap-1 md:gap-2">
+                 <Button 
                     onClick={() => handleToolClick('Burner')}
                     variant={getToolVariant('Burner')}
                     size="lg" 
