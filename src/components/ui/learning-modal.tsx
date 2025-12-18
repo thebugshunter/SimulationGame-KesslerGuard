@@ -55,7 +55,7 @@ export function LearningModal({ isOpen, onClose }: LearningModalProps) {
           </DialogDescription>
         </DialogHeader>
         
-        <div className="overflow-y-hidden px-6">
+        <div className="relative min-h-0 overflow-hidden px-6">
           <ScrollArea className="h-full">
             <div className="grid gap-6 sm:grid-cols-2">
               {instructions.map(({ icon: Icon, title, desktop, mobile }) => (
