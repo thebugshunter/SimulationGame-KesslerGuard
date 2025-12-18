@@ -7,6 +7,7 @@ import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflar
 import { type SpaceObject, spaceObjects, type SpaceObjectType } from '@/lib/space-objects';
 import type { useGameControls } from '@/hooks/use-game-controls';
 import type { CollisionWarning } from '@/components/ui/collision-avoidance-system';
+import type { ShipState } from '@/components/game/ship-state';
 
 
 interface SceneProps {
@@ -17,7 +18,7 @@ interface SceneProps {
   selectedObjectId: string | null;
   filters: Record<SpaceObjectType, boolean>;
   setCollisionWarning: (warning: CollisionWarning | null) => void;
-  setShipOrientation: (orientation: THREE.Euler) => void;
+  shipStateRef: React.MutableRefObject<ShipState>;
 }
 
 function createSatellite(): THREE.Group {
@@ -85,7 +86,7 @@ function createAsteroid(): THREE.Mesh {
     return asteroid;
 }
 
-export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, setShipOrientation }: SceneProps) {
+export function Scene({ setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, shipStateRef }: SceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const linearVelocity = useRef(new THREE.Vector3());
   const selectionIndicatorRef = useRef<THREE.Group | null>(null);
@@ -470,13 +471,16 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       );
       camera.quaternion.premultiply(quaternionDelta);
 
-      // Pass orientation to UI
+      // Pass orientation to UI via ref to avoid re-renders
       const earthRelativeOrientation = new THREE.Euler().setFromQuaternion(
         camera.quaternion.clone().multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), earth.rotation.y).invert()),
         'YXZ'
       );
-      setShipOrientation(earthRelativeOrientation);
-
+      if (shipStateRef.current) {
+        shipStateRef.current.orientation.copy(earthRelativeOrientation);
+        shipStateRef.current.position.copy(camera.position);
+        shipStateRef.current.velocity.copy(linearVelocity.current);
+      }
 
       // Reset mouse delta after applying it
       controls.resetMouseDelta();
@@ -687,7 +691,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
       scene.clear();
       objectMeshesRef.current = [];
     };
-  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, setShipOrientation]);
+  }, [setSelectedObject, controls, setScanResults, updateProximityVolume, selectedObjectId, filters, setCollisionWarning, shipStateRef]);
 
   return <div ref={mountRef} className="h-full w-full" />;
 }

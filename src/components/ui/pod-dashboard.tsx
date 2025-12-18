@@ -1,11 +1,9 @@
 
 'use client';
-import { Scan, Magnet, Menu, Flame } from 'lucide-react';
+import { Scan, Magnet, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { ActiveTool } from '@/components/game/kessler-guard-app';
-import { Gyroscope } from './gyroscope';
-import type { Euler } from 'three';
 
 
 const CockpitFrame = () => (
@@ -28,11 +26,10 @@ interface PodDashboardProps {
   onToolToggle: (tool: ActiveTool) => void;
   activeTool: ActiveTool;
   playClickSound: () => void;
-  shipOrientation: Euler | null;
 }
 
 
-export function PodDashboard({ onToolToggle, activeTool, shipOrientation }: PodDashboardProps) {
+export function PodDashboard({ onToolToggle, activeTool }: PodDashboardProps) {
 
   const handleToolClick = (tool: ActiveTool) => {
     onToolToggle(tool);
@@ -71,11 +68,6 @@ export function PodDashboard({ onToolToggle, activeTool, shipOrientation }: PodD
                     <Magnet className="h-full w-full"/>
                     <span className="sr-only">Magnet</span>
                 </Button>
-            </div>
-            
-            <Gyroscope orientation={shipOrientation} />
-
-            <div className="flex items-end gap-1 md:gap-2">
                  <Button 
                     onClick={() => handleToolClick('Burner')}
                     variant={getToolVariant('Burner')}

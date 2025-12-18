@@ -9,7 +9,9 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
-import { ShieldAlert, Bot, Users, Filter } from 'lucide-react';
+import { ShieldAlert, Bot, Users, Filter, Info } from 'lucide-react';
+import { Gyroscope } from './gyroscope';
+import { useShipState } from '@/components/game/ship-state';
 
 interface TerminalProps {
   isOpen: boolean;
@@ -48,6 +50,31 @@ const ScanResultItem = ({ obj }: { obj: SpaceObject }) => (
     </div>
 );
 
+const ShipStatus = () => {
+    const { shipState } = useShipState();
+    const velocity = shipState.velocity.length();
+
+    return (
+        <div className="space-y-4">
+            <div>
+                <h4 className="mb-2 font-semibold">Orientation Gyroscope</h4>
+                <div className="flex justify-center">
+                    <Gyroscope />
+                </div>
+            </div>
+             <div className="mt-2 pt-4 border-t border-border">
+                <h4 className="mb-2 font-semibold">Telemetry</h4>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 font-mono text-xs">
+                    <p><span className="font-semibold text-muted-foreground">Velocity:</span> {velocity.toFixed(2)} m/s</p>
+                    <p><span className="font-semibold text-muted-foreground">Position X:</span> {shipState.position.x.toFixed(2)}</p>
+                    <p><span className="font-semibold text-muted-foreground">Position Y:</span> {shipState.position.y.toFixed(2)}</p>
+                    <p><span className="font-semibold text-muted-foreground">Position Z:</span> {shipState.position.z.toFixed(2)}</p>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, filters, onFilterChange }: TerminalProps) {
   const objectTypes: SpaceObjectType[] = ['Satellite', 'Debris', 'Asteroid', 'Comet'];
   
@@ -63,13 +90,25 @@ export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, 
         <Card className="h-full rounded-l-lg rounded-r-none border-l-2 border-accent/50 bg-background/80 backdrop-blur-sm">
             <CardContent className="p-4 h-full">
                 <Tabs defaultValue="data" className="flex flex-col h-full">
-                    <TabsList className="grid w-full grid-cols-4 bg-muted/50">
+                    <TabsList className="grid w-full grid-cols-5 bg-muted/50">
+                        <TabsTrigger value="status" onClick={playClickSound}><Info className="mr-2 h-4 w-4" />Status</TabsTrigger>
                         <TabsTrigger value="data" onClick={playClickSound}><Bot className="mr-2 h-4 w-4" />Data</TabsTrigger>
                         <TabsTrigger value="filters" onClick={playClickSound}><Filter className="mr-2 h-4 w-4" />Filters</TabsTrigger>
                         <TabsTrigger value="alarms" onClick={playClickSound}><ShieldAlert className="mr-2 h-4 w-4" />Alarms</TabsTrigger>
                         <TabsTrigger value="multiplayer" onClick={playClickSound}><Users className="mr-2 h-4 w-4" />Mode</TabsTrigger>
                     </TabsList>
                     <ScrollArea className="flex-grow mt-4">
+                        <TabsContent value="status" className="m-0">
+                             <Card className="bg-transparent border-0 shadow-none">
+                                <CardHeader className="p-1">
+                                    <CardTitle>Pod Status</CardTitle>
+                                    <CardDescription>Real-time ship telemetry and orientation.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="p-1">
+                                    <ShipStatus />
+                                </CardContent>
+                            </Card>
+                        </TabsContent>
                         <TabsContent value="data" className="m-0">
                             <Card className="bg-transparent border-0 shadow-none">
                                 <CardHeader className="p-1"><CardTitle>Object Analysis</CardTitle></CardHeader>

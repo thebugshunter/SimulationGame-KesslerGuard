@@ -2,26 +2,26 @@
 'use client';
 import { cn } from '@/lib/utils';
 import type { Euler } from 'three';
+import { useShipState } from '@/components/game/ship-state';
 
-interface GyroscopeProps {
-  orientation: Euler | null;
-}
+const GyroscopeDisplay = () => {
+  const { shipState } = useShipState();
+  const { orientation } = shipState;
 
-const GyroscopeDisplay = ({ orientation }: GyroscopeProps) => {
-  const pitch = orientation ? orientation.x * (180 / Math.PI) : 0;
-  const yaw = orientation ? orientation.y * (180 / Math.PI) : 0;
-  const roll = orientation ? orientation.z * (180 / Math.PI) : 0;
+  const pitch = orientation.x * (180 / Math.PI);
+  const yaw = orientation.y * (180 / Math.PI);
+  const roll = orientation.z * (180 / Math.PI);
 
   const sphereStyle = {
     transform: `rotateX(${-pitch}deg) rotateY(${-yaw}deg) rotateZ(${-roll}deg)`,
   };
 
   return (
-    <div className="flex flex-col items-center gap-1 text-accent">
-      <div className="w-24 h-24" style={{ perspective: '400px' }}>
+    <div className="flex flex-col items-center gap-2 text-accent p-2 rounded-lg bg-black/20">
+      <div className="w-32 h-32" style={{ perspective: '500px' }}>
         <div
           className="relative w-full h-full transition-transform duration-100 ease-linear"
-          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(-20deg)' }}
+          style={{ transformStyle: 'preserve-3d', transform: 'rotateX(-20deg) rotateY(20deg)' }}
         >
           {/* Sphere */}
           <div className="absolute w-full h-full rounded-full border-2 border-accent/50 bg-black/30" style={sphereStyle}>
@@ -30,15 +30,17 @@ const GyroscopeDisplay = ({ orientation }: GyroscopeProps) => {
             {/* Prime Meridian */}
             <div className="absolute left-1/2 -translate-x-1/2 w-px h-full bg-accent/30"></div>
             {/* North Pole Marker */}
-            <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-green-400"></div>
+            <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-green-400/80"></div>
             {/* Earth Vector Marker */}
-            <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-blue-400"></div>
+            <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-blue-400/80"></div>
           </div>
-          {/* Outer Ring */}
-          <div className="absolute w-full h-full rounded-full border border-dashed border-accent/20"></div>
+          {/* Outer Rings */}
+          <div className="absolute w-full h-full rounded-full border border-dashed border-accent/20" style={{transform: 'rotateX(90deg)'}}></div>
+          <div className="absolute w-full h-full rounded-full border border-dashed border-accent/20" style={{transform: 'rotateY(90deg)'}}></div>
+
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-x-2 text-xs font-mono w-full max-w-[150px] text-center">
+      <div className="grid grid-cols-3 gap-x-4 text-sm font-mono w-full max-w-xs text-center">
         <span>P: {pitch.toFixed(0)}°</span>
         <span>Y: {yaw.toFixed(0)}°</span>
         <span>R: {roll.toFixed(0)}°</span>
@@ -48,10 +50,8 @@ const GyroscopeDisplay = ({ orientation }: GyroscopeProps) => {
 };
 
 
-export function Gyroscope({ orientation }: GyroscopeProps) {
+export function Gyroscope() {
   return (
-    <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-black/20 backdrop-blur-sm">
-      <GyroscopeDisplay orientation={orientation} />
-    </div>
+      <GyroscopeDisplay />
   );
 }
