@@ -11,7 +11,7 @@ export default function Home() {
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement | null }>({});
   const [isClient, setIsClient] = useState(false);
   const [isLearningModalOpen, setIsLearningModalOpen] = useState(true);
-  const [isTerminalOpen, setIsTerminalOpen] = useState(true);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);

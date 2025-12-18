@@ -7,25 +7,21 @@ import { Button } from './button';
 
 interface StatusItemProps {
   icon: React.ReactNode;
-  label: string;
   value: string | number;
   unit?: string;
   variant?: 'default' | 'warning' | 'danger';
 }
 
-const StatusItem = ({ icon, label, value, unit, variant = 'default' }: StatusItemProps) => {
+const StatusItem = ({ icon, value, unit, variant = 'default' }: StatusItemProps) => {
     const colors = {
         default: 'text-accent',
         warning: 'text-yellow-400',
         danger: 'text-red-500'
     };
     return (
-        <div className={`flex items-center gap-2 md:gap-3 p-2 rounded-lg bg-black/30 backdrop-blur-sm border border-white/10 ${colors[variant]}`}>
-            {icon}
-            <div className="text-left">
-                <div className="font-mono text-base md:text-xl font-bold -mb-1">{value}{unit}</div>
-                <div className="text-xs font-light uppercase tracking-widest opacity-70">{label}</div>
-            </div>
+        <div className={`flex items-center gap-2 rounded-md bg-black/30 backdrop-blur-sm border border-white/10 px-2 py-1 ${colors[variant]}`}>
+            <div className="h-4 w-4">{icon}</div>
+            <div className="font-mono text-xs font-bold">{value}{unit}</div>
         </div>
     );
 };
@@ -49,58 +45,60 @@ export function GameHeader({ isSoundMuted, onToggleSound, onToggleTerminal }: Ga
   }, []);
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-20 grid grid-cols-3 items-start gap-4 p-4">
-      <div className="flex items-center gap-2 self-center justify-self-start">
-        <Rocket className="h-6 w-6 text-accent" />
-        <h1 className="font-headline text-xl md:text-2xl font-bold tracking-tighter text-white">
-          Kessler Guard
-        </h1>
+    <header className="pointer-events-none absolute top-0 left-0 right-0 z-20 flex items-start justify-between gap-4 p-2 sm:p-4">
+      {/* Left Group */}
+      <div className="pointer-events-auto flex items-center gap-2">
+        <div className="flex items-center gap-2 p-2 rounded-lg bg-black/30 backdrop-blur-sm border border-white/10">
+          <Rocket className="h-5 w-5 text-accent" />
+          <h1 className="hidden sm:block font-headline text-base font-bold tracking-tighter text-white">
+            Kessler Guard
+          </h1>
+        </div>
       </div>
-
-      <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-2 md:gap-4 col-start-1 col-span-3 lg:col-start-2 lg:col-span-1 order-3 lg:order-2 mt-2 lg:mt-0">
-          <StatusItem icon={<Zap className="h-5 w-5" />} label="Power" value={99} unit="%" />
-          <StatusItem icon={<Fuel className="h-5 w-5" />} label="Fuel" value={98} unit="%" />
-          <StatusItem icon={<Compass className="h-5 w-5" />} label="Gyroscope" value="Online" />
+      
+      {/* Center Group - Status Items */}
+      <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-1 sm:gap-2">
+          <StatusItem icon={<Zap />} value={99} unit="%" />
+          <StatusItem icon={<Fuel />} value={98} unit="%" />
+          <StatusItem icon={<Compass />} value="Online" />
           <StatusItem 
-              icon={<AlertTriangle className="h-5 w-5" />} 
-              label="Proximity" 
-              value={gravityWarning ? 'ALERT' : 'Clear'}
+              icon={<AlertTriangle />} 
+              value={gravityWarning ? 'ALERT' : 'CLR'}
               variant={gravityWarning ? 'danger' : 'default'}
            />
            <StatusItem 
-              icon={<div className="h-5 w-5 text-sm font-bold flex items-center justify-center">K</div>}
-              label="Kessler Risk"
-              value={kesslerScore}
-              unit="%"
+              icon={<span className="font-bold">K</span>}
+              value={`${kesslerScore}%`}
               variant={kesslerScore > 15 ? 'warning' : 'default'}
           />
       </div>
 
-      <div className="flex items-center gap-2 order-2 lg:order-3 self-center justify-self-end">
+      {/* Right Group */}
+      <div className="pointer-events-auto flex items-center gap-1 sm:gap-2">
         <Button 
           onClick={onToggleTerminal} 
           variant="ghost" 
           size="icon" 
-          className="text-accent hover:bg-accent/10 hover:text-accent"
+          className="text-accent h-9 w-9 hover:bg-accent/10 hover:text-accent rounded-lg bg-black/30 backdrop-blur-sm border border-white/10"
         >
-            <Menu className="h-6 w-6" />
+            <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle Data Terminal</span>
         </Button>
         <Button 
           onClick={onToggleSound} 
           variant="ghost" 
           size="icon" 
-          className="text-accent hover:bg-accent/10 hover:text-accent"
+          className="text-accent h-9 w-9 hover:bg-accent/10 hover:text-accent rounded-lg bg-black/30 backdrop-blur-sm border border-white/10"
         >
-          {isSoundMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+          {isSoundMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
           <span className="sr-only">Toggle Sound</span>
         </Button>
         <Button 
           variant="ghost" 
           size="icon" 
-          className="text-accent hover:bg-accent/10 hover:text-accent"
+          className="text-accent h-9 w-9 hover:bg-accent/10 hover:text-accent rounded-lg bg-black/30 backdrop-blur-sm border border-white/10"
         >
-          <Settings className="h-6 w-6" />
+          <Settings className="h-5 w-5" />
           <span className="sr-only">Game Settings</span>
         </Button>
       </div>

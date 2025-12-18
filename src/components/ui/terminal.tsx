@@ -57,8 +57,8 @@ export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, 
   
   return (
     <div className={cn(
-        "absolute bottom-[calc(theme(spacing.4)_+_6rem)] right-4 top-4 w-96 max-w-[calc(100vw-2rem)] transform transition-transform duration-300 ease-in-out md:bottom-4 lg:top-[calc(theme(spacing.4)_+_4rem)]",
-        "lg:top-[calc(theme(spacing.16)_+_1.5rem)]",
+        "absolute bottom-[calc(theme(spacing.4)_+_6rem)] right-4 top-4 w-96 max-w-[calc(100vw-2rem)] transform transition-transform duration-300 ease-in-out md:bottom-4",
+        "lg:top-[calc(theme(spacing.4)_+_3.25rem)]",
         isOpen ? "translate-x-0" : "translate-x-[105%]"
     )}>
         <Card className="h-full rounded-lg border-l-2 border-accent/50 bg-background/80 backdrop-blur-sm">
@@ -92,6 +92,7 @@ export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, 
                                         <div className="p-3 rounded-md bg-muted/50 min-h-[120px]">
                                             {selectedObject ? <ObjectDetails obj={selectedObject} /> : <p className="text-sm text-muted-foreground">No object selected. Click an object in the scene to analyze.</p>}
                                         </div>
+
                                     </div>
 
                                     <div className="mt-2 pt-2 border-t border-border">
