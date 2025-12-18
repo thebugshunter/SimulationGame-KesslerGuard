@@ -145,9 +145,12 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
         uniforms: coronaUniforms,
         vertexShader: `
             varying vec3 vNormal;
+            varying vec3 vViewPosition;
             void main() {
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                vViewPosition = -mvPosition.xyz;
                 vNormal = normalize( normalMatrix * normal );
-                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                gl_Position = projectionMatrix * mvPosition;
             }
         `,
         fragmentShader: `
@@ -156,6 +159,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             uniform vec3 glowColor;
             uniform float time;
             varying vec3 vNormal;
+            varying vec3 vViewPosition;
             
             // 2D simplex noise function
             vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -209,7 +213,7 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             }
 
             void main() {
-                vec3 viewDirection = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
+                vec3 viewDirection = normalize(vViewPosition);
                 float intensity = pow(c - dot(vNormal, viewDirection), p);
                 float noise = 1.0 + snoise(vNormal * 4.0 + time * 0.5) * 0.1;
                 gl_FragColor = vec4(glowColor * noise, 1.0) * intensity;
@@ -244,9 +248,12 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
         },
         vertexShader: `
             varying vec3 vNormal;
+            varying vec3 vViewPosition;
             void main() {
+                vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+                vViewPosition = -mvPosition.xyz;
                 vNormal = normalize( normalMatrix * normal );
-                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                gl_Position = projectionMatrix * mvPosition;
             }
         `,
         fragmentShader: `
@@ -254,8 +261,9 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
             uniform float p;
             uniform vec3 glowColor;
             varying vec3 vNormal;
+            varying vec3 vViewPosition;
             void main() {
-                vec3 viewDirection = normalize(cameraPosition - (modelMatrix * vec4(position, 1.0)).xyz);
+                vec3 viewDirection = normalize(vViewPosition);
                 float intensity = pow( c - dot( vNormal, viewDirection ), p );
                 gl_FragColor = vec4( glowColor, 1.0 ) * intensity;
             }
