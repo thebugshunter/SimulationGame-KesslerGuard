@@ -8,6 +8,7 @@ import { Terminal } from '@/components/ui/terminal';
 import type { SpaceObject, SpaceObjectType } from '@/lib/space-objects';
 import { useGameControls } from '@/hooks/use-game-controls';
 import { JoystickControls } from '@/components/ui/joystick-controls';
+import { CollisionAvoidanceSystem, type CollisionWarning } from '@/components/ui/collision-avoidance-system';
 
 export type ActiveTool = 'Scan' | 'Magnet' | 'Burner' | null;
 export type JoystickMode = 'move' | 'look' | null;
@@ -33,6 +34,7 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
   const [scanResults, setScanResults] = useState<SpaceObject[]>([]);
   const [filters, setFilters] = useState<Record<SpaceObjectType, boolean>>(initialFilters);
   const [activeTool, setActiveTool] = useState<ActiveTool>(null);
+  const [collisionWarning, setCollisionWarning] = useState<CollisionWarning | null>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   
   const controls = useGameControls({
@@ -88,8 +90,11 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
           updateProximityVolume={updateProximityVolume}
           selectedObjectId={selectedObject?.id ?? null}
           filters={filters}
+          setCollisionWarning={setCollisionWarning}
         />
       </div>
+      
+      <CollisionAvoidanceSystem warning={collisionWarning} />
       
       {/* Unified Bottom Bar */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-1 p-1 md:gap-4 md:p-4">
