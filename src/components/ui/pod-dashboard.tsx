@@ -3,7 +3,7 @@
 import { Scan, Magnet, Menu, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { ActiveTool } from '@/components/game/orbital-sync-app';
+import type { ActiveTool } from '@/components/game/kessler-guard-app';
 
 const CockpitFrame = () => (
     <svg viewBox="0 0 1440 900" className="absolute bottom-0 left-0 right-0 w-full h-auto pointer-events-none" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
