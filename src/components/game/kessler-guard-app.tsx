@@ -99,7 +99,7 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
       {/* Unified Bottom Bar */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-1 p-1 md:gap-4 md:p-4">
           {/* Left Joystick */}
-          <div className="pointer-events-auto shrink-0">
+          <div className="pointer-events-auto shrink-0 hidden md:block">
               <JoystickControls 
                   onJoystickMove={setMoveJoystickState}
                   label="Move"
@@ -116,7 +116,7 @@ export function KesslerGuardApp({ audioRefs, isSoundMuted, updateProximityVolume
           </div>
 
           {/* Right Joystick */}
-          <div className="pointer-events-auto shrink-0">
+          <div className="pointer-events-auto shrink-0 hidden md:block">
                <JoystickControls 
                   onJoystickMove={setLookJoystickState} 
                   label="Look"

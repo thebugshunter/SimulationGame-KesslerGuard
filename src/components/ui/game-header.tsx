@@ -23,7 +23,7 @@ const StatusItem = ({ icon, label, value, unit, variant = 'default' }: StatusIte
         <div className={`flex items-center gap-2 md:gap-3 p-2 rounded-lg bg-black/30 backdrop-blur-sm border border-white/10 ${colors[variant]}`}>
             {icon}
             <div className="text-left">
-                <div className="font-mono text-lg md:text-xl font-bold -mb-1">{value}{unit}</div>
+                <div className="font-mono text-base md:text-xl font-bold -mb-1">{value}{unit}</div>
                 <div className="text-xs font-light uppercase tracking-widest opacity-70">{label}</div>
             </div>
         </div>
@@ -49,26 +49,26 @@ export function GameHeader({ isSoundMuted, onToggleSound, onToggleTerminal }: Ga
   }, []);
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-20 flex h-auto min-h-16 items-start justify-between gap-4 p-4 flex-wrap">
-      <div className="flex items-center gap-2 self-center">
+    <header className="absolute top-0 left-0 right-0 z-20 grid grid-cols-3 items-start gap-4 p-4">
+      <div className="flex items-center gap-2 self-center justify-self-start">
         <Rocket className="h-6 w-6 text-accent" />
-        <h1 className="font-headline text-2xl font-bold tracking-tighter text-white">
+        <h1 className="font-headline text-xl md:text-2xl font-bold tracking-tighter text-white">
           Kessler Guard
         </h1>
       </div>
 
-      <div className="pointer-events-auto flex flex-wrap justify-center gap-2 md:gap-4 order-3 sm:order-2 flex-1 min-w-full sm:min-w-0 sm:justify-center">
-          <StatusItem icon={<Zap className="h-6 w-6" />} label="Power" value={99} unit="%" />
-          <StatusItem icon={<Fuel className="h-6 w-6" />} label="Fuel" value={98} unit="%" />
-          <StatusItem icon={<Compass className="h-6 w-6" />} label="Gyroscope" value="Online" />
+      <div className="pointer-events-auto flex flex-wrap items-center justify-center gap-2 md:gap-4 col-start-1 col-span-3 lg:col-start-2 lg:col-span-1 order-3 lg:order-2 mt-2 lg:mt-0">
+          <StatusItem icon={<Zap className="h-5 w-5" />} label="Power" value={99} unit="%" />
+          <StatusItem icon={<Fuel className="h-5 w-5" />} label="Fuel" value={98} unit="%" />
+          <StatusItem icon={<Compass className="h-5 w-5" />} label="Gyroscope" value="Online" />
           <StatusItem 
-              icon={<AlertTriangle className="h-6 w-6" />} 
+              icon={<AlertTriangle className="h-5 w-5" />} 
               label="Proximity" 
               value={gravityWarning ? 'ALERT' : 'Clear'}
               variant={gravityWarning ? 'danger' : 'default'}
            />
            <StatusItem 
-              icon={<div className="h-6 w-6 text-sm font-bold flex items-center justify-center">K</div>}
+              icon={<div className="h-5 w-5 text-sm font-bold flex items-center justify-center">K</div>}
               label="Kessler Risk"
               value={kesslerScore}
               unit="%"
@@ -76,7 +76,7 @@ export function GameHeader({ isSoundMuted, onToggleSound, onToggleTerminal }: Ga
           />
       </div>
 
-      <div className="flex items-center gap-2 order-2 sm:order-3 self-center">
+      <div className="flex items-center gap-2 order-2 lg:order-3 self-center justify-self-end">
         <Button 
           onClick={onToggleTerminal} 
           variant="ghost" 

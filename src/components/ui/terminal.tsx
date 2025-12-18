@@ -57,10 +57,11 @@ export function Terminal({ isOpen, selectedObject, scanResults, playClickSound, 
   
   return (
     <div className={cn(
-        "absolute bottom-24 right-0 top-16 w-96 transform transition-transform duration-300 ease-in-out",
+        "absolute bottom-[calc(theme(spacing.4)_+_6rem)] right-4 top-4 w-96 max-w-[calc(100vw-2rem)] transform transition-transform duration-300 ease-in-out md:bottom-4 lg:top-[calc(theme(spacing.4)_+_4rem)]",
+        "lg:top-[calc(theme(spacing.16)_+_1.5rem)]",
         isOpen ? "translate-x-0" : "translate-x-[105%]"
     )}>
-        <Card className="h-full rounded-l-lg rounded-r-none border-l-2 border-accent/50 bg-background/80 backdrop-blur-sm">
+        <Card className="h-full rounded-lg border-l-2 border-accent/50 bg-background/80 backdrop-blur-sm">
             <CardContent className="p-4 h-full">
                 <Tabs defaultValue="data" className="flex flex-col h-full">
                     <TabsList className="grid w-full grid-cols-5 bg-muted/50">
