@@ -343,6 +343,25 @@ export function Scene({ setSelectedObject, controls, setScanResults, updateProxi
         transparent: true,
         opacity: 0.8
      });
+    starMaterial.onBeforeCompile = shader => {
+        shader.vertexShader = `
+          attribute float size;
+          varying vec3 vColor;
+          void main() {
+            vColor = color;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (300.0 / -mvPosition.z);
+            gl_Position = projectionMatrix * mvPosition;
+          }
+        `;
+        shader.fragmentShader = `
+          varying vec3 vColor;
+          void main() {
+            if (length(gl_PointCoord - vec2(0.5, 0.5)) > 0.475) discard;
+            gl_FragColor = vec4(vColor, 1.0);
+          }
+        `;
+    };
     const stars = new THREE.Points(starGeometry, starMaterial);
     scene.add(stars);
 
