@@ -7,6 +7,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Move, Mouse, Scan, Target } from 'lucide-react';
 
 interface LearningModalProps {
@@ -17,53 +18,55 @@ interface LearningModalProps {
 export function LearningModal({ isOpen, onClose }: LearningModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md bg-background/80 backdrop-blur-md border-accent/50" hideCloseButton>
+      <DialogContent className="max-w-md bg-background/80 backdrop-blur-md border-accent/50 flex flex-col max-h-[90vh]" hideCloseButton>
         <DialogHeader>
           <DialogTitle className="font-headline text-accent text-2xl">Welcome to Kessler Guard</DialogTitle>
           <DialogDescription>
             Your mission is to help clean up low-earth orbit. The Kessler Syndrome is a real threat, and this simulation is a training ground for the science and engineering needed to solve it. You are pioneering the future of remote work, performing critical operations in space, all from Earth.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="flex items-center gap-4">
-            <div className="rounded-md bg-muted p-2">
-              <Move className="h-6 w-6 text-accent" />
+        <ScrollArea className="flex-grow">
+          <div className="grid gap-4 py-4 pr-4">
+            <div className="flex items-center gap-4">
+              <div className="rounded-md bg-muted p-2">
+                <Move className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Movement</h4>
+                <p className="text-sm text-muted-foreground">Use WASD to thrust, Space/Shift to move vertically.</p>
+              </div>
             </div>
-            <div>
-              <h4 className="font-semibold">Movement</h4>
-              <p className="text-sm text-muted-foreground">Use WASD to thrust, Space/Shift to move vertically.</p>
+            <div className="flex items-center gap-4">
+              <div className="rounded-md bg-muted p-2">
+                <Mouse className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Camera</h4>
+                <p className="text-sm text-muted-foreground">Click and drag on the screen to look around.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="rounded-md bg-muted p-2">
+                <Target className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Targeting</h4>
+                <p className="text-sm text-muted-foreground">Click on any object to get its data in the terminal.</p>
+              </div>
+            </div>
+             <div className="flex items-center gap-4">
+              <div className="rounded-md bg-muted p-2">
+                <Scan className="h-6 w-6 text-accent" />
+              </div>
+              <div>
+                <h4 className="font-semibold">Tools</h4>
+                <p className="text-sm text-muted-foreground">Use your pod's tools to interact with objects. But be careful!</p>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="rounded-md bg-muted p-2">
-              <Mouse className="h-6 w-6 text-accent" />
-            </div>
-            <div>
-              <h4 className="font-semibold">Camera</h4>
-              <p className="text-sm text-muted-foreground">Click and drag on the screen to look around.</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="rounded-md bg-muted p-2">
-              <Target className="h-6 w-6 text-accent" />
-            </div>
-            <div>
-              <h4 className="font-semibold">Targeting</h4>
-              <p className="text-sm text-muted-foreground">Click on any object to get its data in the terminal.</p>
-            </div>
-          </div>
-           <div className="flex items-center gap-4">
-            <div className="rounded-md bg-muted p-2">
-              <Scan className="h-6 w-6 text-accent" />
-            </div>
-            <div>
-              <h4 className="font-semibold">Tools</h4>
-              <p className="text-sm text-muted-foreground">Use your pod's tools to interact with objects. But be careful!</p>
-            </div>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button onClick={onClose} className="bg-accent text-background hover:bg-accent/90">Start Mission</Button>
+        </ScrollArea>
+        <DialogFooter className="mt-auto pt-4">
+          <Button onClick={onClose} className="w-full bg-accent text-background hover:bg-accent/90">Start Mission</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
